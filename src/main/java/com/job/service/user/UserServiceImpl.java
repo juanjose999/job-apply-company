@@ -1,14 +1,13 @@
-package com.job.service;
+package com.job.service.user;
 
-import com.job.repository.UserRepository;
-import com.job.service.dto.LoginFormUser;
-import com.job.service.dto.UserMapper;
-import com.job.service.dto.UserResponseDto;
+import com.job.repository.user.UserRepository;
+import com.job.service.dto.user.LoginFormUser;
+import com.job.service.dto.user.UserMapper;
+import com.job.service.dto.user.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

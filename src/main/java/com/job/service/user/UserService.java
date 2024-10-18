@@ -1,11 +1,9 @@
-package com.job.service;
+package com.job.service.user;
 
-import com.job.entities.MyUser;
-import com.job.service.dto.LoginFormUser;
-import com.job.service.dto.UserResponseDto;
+import com.job.service.dto.user.LoginFormUser;
+import com.job.service.dto.user.UserResponseDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
     List<UserResponseDto> allUsers();

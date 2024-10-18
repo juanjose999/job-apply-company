@@ -1,4 +1,4 @@
-package com.job.service.dto;
+package com.job.service.dto.user;
 
 import com.job.entities.MyUser;
 

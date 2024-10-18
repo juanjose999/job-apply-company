@@ -1,8 +1,7 @@
-package com.job.repository;
+package com.job.repository.user;
 
 import com.job.entities.MyUser;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 

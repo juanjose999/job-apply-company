@@ -1,25 +1,17 @@
 package com.job;
 
 import com.job.entities.MyUser;
-import com.job.repository.UserRepository;
-import com.job.repository.UserRepositoryImpl;
-import com.job.service.UserService;
-import com.job.service.UserServiceImpl;
-import com.job.service.dto.LoginFormUser;
-import com.job.service.dto.UserMapper;
-import com.job.service.dto.UserResponseDto;
-import net.bytebuddy.implementation.bytecode.Throw;
-import org.assertj.core.api.Assert;
-import org.junit.jupiter.api.Assertions;
+import com.job.repository.user.UserRepositoryImpl;
+import com.job.service.user.UserServiceImpl;
+import com.job.service.dto.user.LoginFormUser;
+import com.job.service.dto.user.UserMapper;
+import com.job.service.dto.user.UserResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
 import java.util.Arrays;
