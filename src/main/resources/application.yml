@@ -1,13 +1,2 @@
 server:
   port: 8081
-
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/jobs
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    show-sql: true
