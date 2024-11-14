@@ -4,6 +4,7 @@ import com.job.entities.Company;
 import com.job.entities.Offert;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface OfferRepository {
     List<Offert> allOffert();
