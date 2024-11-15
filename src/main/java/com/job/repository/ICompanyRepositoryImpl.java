@@ -1,6 +1,7 @@
 package com.job.repository;
 
 import com.job.entities.Company;
+import com.job.exception.CompanyNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -11,41 +12,40 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ICompanyRepositoryImpl implements ICompanyRepository {
 
-    private final ICompanyRepositoryJpa ICompanyRepositoryJpa;
+    private final ICompanyRepositoryJpa companyRepositoryJpa;
 
     @Override
     public List<Company> findAllCompany() {
-        return ICompanyRepositoryJpa.findAll();
+        return companyRepositoryJpa.findAll();
     }
 
     @Override
     public Company saveCompany(Company company) {
-        return ICompanyRepositoryJpa.save(company);
+        return companyRepositoryJpa.save(company);
     }
 
     @Override
-    public Company findCompanyByEmail(String email) {
-        return ICompanyRepositoryJpa.findCompanyByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Company not found"));
+    public Optional<Company> findCompanyByEmail(String email) throws CompanyNotFoundException {
+        return companyRepositoryJpa.findCompanyByEmail(email);
     }
 
     @Override
     public Company updateCompanyByEmail(String email, Company company) {
-        Optional<Company> companyOptional = ICompanyRepositoryJpa.findCompanyByEmail(email);
+        Optional<Company> companyOptional = companyRepositoryJpa.findCompanyByEmail(email);
         if(companyOptional.isPresent()) {
             Company companyToUpdate = companyOptional.get();
             if(company.getFull_name() != null) companyToUpdate.setFull_name(company.getFull_name());
             if(company.getEmail() != null) companyToUpdate.setEmail(company.getEmail());
             if(company.getPassword() != null) companyToUpdate.setPassword(company.getPassword());
-            return ICompanyRepositoryJpa.save(companyToUpdate);
+            return companyRepositoryJpa.save(companyToUpdate);
         }
-        throw new RuntimeException("Company not found");
+        return companyOptional.get();
     }
 
     @Override
     public boolean deleteCompanyByEmail(String email) {
-        if(ICompanyRepositoryJpa.existsCompaniesByEmail(email)) {
-            ICompanyRepositoryJpa.deleteCompaniesByEmail(email);
+        if(companyRepositoryJpa.existsCompaniesByEmail(email)) {
+            companyRepositoryJpa.deleteCompaniesByEmail(email);
             return true;
         }
         return false;

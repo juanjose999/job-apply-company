@@ -5,6 +5,7 @@ import com.job.entities.dto.CompanyDto;
 import com.job.entities.dto.CompanyMapper;
 import com.job.entities.dto.CompanyResponseDto;
 import com.job.entities.dto.FormUpdateCompany;
+import com.job.exception.CompanyNotFoundException;
 import com.job.repository.ICompanyRepositoryImpl;
 import com.job.service.CompanyServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -50,7 +53,7 @@ public class CompanyTest {
     }
 
     @Test
-    public void should_findCompanyByEmail_return_companyDto(){
+    public void should_findCompanyByEmail_return_companyDto() throws CompanyNotFoundException {
         String findEmail = "hola@gmail.com";
         CompanyDto formSaveCompany = CompanyDto.builder()
                 .email(findEmail)
@@ -66,64 +69,55 @@ public class CompanyTest {
         assertNotNull(companyObj);
         assertNotNull(companyResponseDto);
 
-        when(companyRepository.findCompanyByEmail(findEmail)).thenReturn(companyObj);
-        Company company = companyRepository.findCompanyByEmail(findEmail);
+        when(companyRepository.findCompanyByEmail(findEmail)).thenReturn(Optional.of(companyObj));
+        Company company = companyRepository.findCompanyByEmail(findEmail).get();
         CompanyResponseDto companyResponseDtoByEmail = companyService.findCompanyByEmail(findEmail);
 
         assertNotNull(company);
         assertNotNull(companyResponseDtoByEmail);
-        assertEquals("hola company ",companyResponseDto.fullName());
+        assertEquals("hola company",companyResponseDto.fullName());
         assertEquals("hola@gmail.com",companyResponseDto.email());
     }
 
     @Test
-    public void should_updateCompanyByEmail_then_return_companyDto(){
+    public void should_findCompanyByEmailNotExist_return_CompanyException() throws CompanyNotFoundException {
+        String findEmail = "hola@gmail.com";
+
+        when(companyRepository.findCompanyByEmail(findEmail)).thenReturn(Optional.empty());
+        Exception exceptionCompanyNotFound = assertThrows(CompanyNotFoundException.class, () -> companyService.findCompanyByEmail(findEmail));
+
+        assertEquals("Company not found with email " + findEmail , exceptionCompanyNotFound.getMessage());
+    }
+
+    @Test
+    public void should_updateCompanyByEmail_then_return_companyDto() throws CompanyNotFoundException {
         String findEmail = "hola@mail.com";
-        CompanyDto formSaveCompany = CompanyDto.builder()
-                .fullName("hola company")
+
+        Company company = Company.builder()
+                .full_name("hola company")
                 .email(findEmail)
                 .password("123xxx")
                 .build();
-        Company company = CompanyMapper.CompanyDtoToCompany(formSaveCompany);
 
-        FormUpdateCompany formUpdateCompany = FormUpdateCompany.builder()
-                .email(findEmail)
-                .companyDto(formSaveCompany)
-                .build();
-
-        CompanyDto companyUpdate = CompanyDto.builder()
+        Company companyUpdate = Company.builder()
+                .full_name("bye company")
                 .email("byeoy@gmail.com")
-                .fullName("bye company")
                 .password("bye123")
                 .build();
 
-        when(companyRepository.saveCompany(any(Company.class))).thenReturn(company);
-        Company companyObj = companyRepository.saveCompany(company);
-        CompanyResponseDto companyResponseNotUpdate = companyService.saveCompany(formSaveCompany);
-
-        assertNotNull(companyObj);
-        assertEquals("hola@mail.com", companyObj.getEmail());
-        assertEquals("hola company", companyObj.getFull_name());
-        assertNotNull(companyResponseNotUpdate);
-        assertEquals(findEmail, companyResponseNotUpdate.email());
-        assertEquals("hola company", companyResponseNotUpdate.fullName());
-
-
-        when(companyRepository.updateCompanyByEmail(anyString(), any(Company.class))).thenReturn(CompanyMapper.CompanyDtoToCompany(companyUpdate));
-        Company companyUpdateIsOk = companyRepository.updateCompanyByEmail(findEmail, CompanyMapper.CompanyDtoToCompany(companyUpdate));
-        FormUpdateCompany formUpdateCompanyToUpdate = FormUpdateCompany.builder()
+        FormUpdateCompany formUpdateCompany = FormUpdateCompany.builder()
                 .email(findEmail)
-                .companyDto(companyUpdate)
+                .companyDto(new CompanyDto("bye company","byeoy@gmail.com","bye123"))
                 .build();
 
+        when(companyRepository.findCompanyByEmail(findEmail)).thenReturn(Optional.of(company));
+        when(companyRepository.updateCompanyByEmail(eq(findEmail), any(Company.class))).thenReturn(companyUpdate);
         CompanyResponseDto companyResponseUpdateIsOk = companyService.updateCompanyByEmail(formUpdateCompany);
 
-        assertNotNull(companyUpdateIsOk);
-        assertEquals("byeoy@gmail.com",companyUpdateIsOk.getEmail());
+
         assertNotNull(companyResponseUpdateIsOk);
         assertEquals("byeoy@gmail.com", companyResponseUpdateIsOk.email());
         assertEquals("bye company", companyResponseUpdateIsOk.fullName());
-
 
     }
 
