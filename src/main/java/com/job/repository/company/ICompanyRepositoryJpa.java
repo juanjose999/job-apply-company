@@ -1,6 +1,6 @@
-package com.job.repository;
+package com.job.repository.company;
 
-import com.job.entities.Company;
+import com.job.entities.company.Company;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

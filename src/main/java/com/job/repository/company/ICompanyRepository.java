@@ -1,6 +1,6 @@
-package com.job.repository;
+package com.job.repository.company;
 
-import com.job.entities.Company;
+import com.job.entities.company.Company;
 import com.job.exception.CompanyNotFoundException;
 
 import java.util.List;

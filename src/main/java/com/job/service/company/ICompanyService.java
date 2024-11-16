@@ -1,8 +1,8 @@
-package com.job.service;
+package com.job.service.company;
 
-import com.job.entities.dto.CompanyDto;
-import com.job.entities.dto.CompanyResponseDto;
-import com.job.entities.dto.FormUpdateCompany;
+import com.job.entities.company.dto.CompanyDto;
+import com.job.entities.company.dto.CompanyResponseDto;
+import com.job.entities.company.dto.FormUpdateCompany;
 import com.job.exception.CompanyNotFoundException;
 
 import java.util.List;

@@ -1,13 +1,13 @@
 package com.job;
 
-import com.job.entities.Company;
-import com.job.entities.dto.CompanyDto;
-import com.job.entities.dto.CompanyMapper;
-import com.job.entities.dto.CompanyResponseDto;
-import com.job.entities.dto.FormUpdateCompany;
+import com.job.entities.company.Company;
+import com.job.entities.company.dto.CompanyDto;
+import com.job.entities.company.dto.CompanyMapper;
+import com.job.entities.company.dto.CompanyResponseDto;
+import com.job.entities.company.dto.FormUpdateCompany;
 import com.job.exception.CompanyNotFoundException;
-import com.job.repository.ICompanyRepositoryImpl;
-import com.job.service.CompanyServiceImpl;
+import com.job.repository.company.ICompanyRepositoryImpl;
+import com.job.service.company.CompanyServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

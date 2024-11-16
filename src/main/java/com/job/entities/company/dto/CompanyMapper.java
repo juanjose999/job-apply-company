@@ -1,6 +1,6 @@
-package com.job.entities.dto;
+package com.job.entities.company.dto;
 
-import com.job.entities.Company;
+import com.job.entities.company.Company;
 
 public class CompanyMapper {
 

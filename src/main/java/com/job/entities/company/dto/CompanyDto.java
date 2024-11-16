@@ -1,4 +1,4 @@
-package com.job.entities.dto;
+package com.job.entities.company.dto;
 
 import lombok.Builder;
 

@@ -1,17 +1,16 @@
-package com.job.service;
+package com.job.service.company;
 
-import com.job.entities.Company;
-import com.job.entities.dto.CompanyDto;
-import com.job.entities.dto.CompanyMapper;
-import com.job.entities.dto.CompanyResponseDto;
-import com.job.entities.dto.FormUpdateCompany;
+import com.job.entities.company.Company;
+import com.job.entities.company.dto.CompanyDto;
+import com.job.entities.company.dto.CompanyMapper;
+import com.job.entities.company.dto.CompanyResponseDto;
+import com.job.entities.company.dto.FormUpdateCompany;
 import com.job.exception.CompanyNotFoundException;
-import com.job.repository.ICompanyRepository;
+import com.job.repository.company.ICompanyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
