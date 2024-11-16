@@ -1,10 +1,9 @@
 package com.job.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,5 +18,4 @@ public class Company {
     private String full_name;
     private String email;
     private String password;
-
 }
