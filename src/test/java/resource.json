@@ -1,0 +1,28 @@
+{
+    "userDto": {
+        "firstName": "juan jose",
+        "lastName": "sierra ortega",
+        "email": "juan@gmail.com",
+        "password": "123aaa"
+    },
+    "userList": [
+        {
+            "firstName": "juan jose",
+            "lastName": "sierra ortega",
+            "email": "juan@gmail.com",
+            "password": "123aaa"
+        },
+        {
+            "firstName": "maria",
+            "lastName": "lopez",
+            "email": "maria@gmail.com",
+            "password": "abc123"
+        },
+        {
+            "firstName": "carlos",
+            "lastName": "gomez",
+            "email": "carlos@gmail.com",
+            "password": "xyz789"
+        }
+    ]
+}
