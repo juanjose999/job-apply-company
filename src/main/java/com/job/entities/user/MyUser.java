@@ -1,10 +1,10 @@
 package com.job.entities.user;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.job.entities.offer.Offer;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,4 +20,6 @@ public class MyUser {
     private String last_name;
     private String email;
     private String password;
+    @ManyToMany(mappedBy = "user")
+    private List<Offer> offer;
 }
