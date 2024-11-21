@@ -1,10 +1,12 @@
 package com.job;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.job.entities.company.Company;
 import com.job.entities.company.dto.CompanyDto;
 import com.job.entities.company.dto.CompanyMapper;
 import com.job.entities.offer.Offer;
 import com.job.entities.offer.dto.*;
+import com.job.entities.user.dto.MyUserDto;
 import com.job.exception.CompanyNotFoundException;
 import com.job.exception.OfferNotFoundException;
 import com.job.repository.company.ICompanyRepository;
@@ -16,6 +18,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +43,7 @@ public class OfferTest {
     private OfferServiceImpl offerService;
 
     @Test
-    public void should_create_offerDto_insideCompany_return_offerResponseDto() throws CompanyNotFoundException {
+    public void should_create_offerDto_insideCompany_return_offerResponseDto() throws CompanyNotFoundException, IOException {
         // formulario de registro de compañia
         CompanyDto formSaveCompany = CompanyDto.builder()
                 .fullName("hola company")
@@ -54,27 +58,28 @@ public class OfferTest {
                 .password("123xxx")
                 .build();
 
-        //simulo la creacion y la busqueda de la compañia
-        when(companyRepository.findCompanyByEmail("hola@gmail.com")).thenReturn(Optional.of(company));
-
         //formulario de registro de oferta
-        OfferDto offerDto = OfferDto.builder()
+
+        FormSaveOffer formSaveOffer = FormSaveOffer.builder()
                 .title("java dev")
                 .description("dev use java and spring boot")
                 .requirements("java, spring, mysql")
-                .date_create(String.valueOf(LocalDateTime.now()))
+                .date_created(String.valueOf(LocalDateTime.now()))
                 .active(true)
-                .build();
-
-        Offer offer = OfferMapper.offerDtoToOffer(offerDto);
-        offer.setId(1L);
-        offer.setCompany(company);
-        company.setOffer(offer);
-
-        FormSaveOffer formSaveOffer = FormSaveOffer.builder()
-                .offerDto(offerDto)
                 .emailCompany("hola@gmail.com")
                 .build();
+
+        Offer offer = Offer.builder()
+                .id(1L)
+                .title("java dev")
+                .description("dev use java and spring boot")
+                .requirements("java, spring, mysql")
+                .date_created(String.valueOf(LocalDateTime.now()))
+                .active(true)
+                .company(company)
+                .build();
+
+        company.setOffer(offer);
 
         when(companyRepository.findCompanyByEmail("hola@gmail.com")).thenReturn(Optional.of(company));
         when(offerRepository.saveOffer(any(Offer.class), any(Company.class))).thenReturn(offer);
@@ -98,12 +103,22 @@ public class OfferTest {
                 .active(true)
                 .build();
 
-        Offer offer = OfferMapper.offerDtoToOffer(offerDto);
-        offer.setId(1L);
-        offer.setCompany(null);
+        Offer offer = Offer.builder()
+                .id(1L)
+                .title("java dev")
+                .description("dev use java and spring boot")
+                .requirements("java, spring, mysql")
+                .date_created(String.valueOf(LocalDateTime.now()))
+                .active(true)
+                .build();
+
 
         FormSaveOffer formSaveOffer = FormSaveOffer.builder()
-                .offerDto(offerDto)
+                .title("java dev")
+                .description("dev use java and spring boot")
+                .requirements("java, spring, mysql")
+                .date_created(String.valueOf(LocalDateTime.now()))
+                .active(true)
                 .emailCompany("noexist@gmail.com")
                 .build();
 

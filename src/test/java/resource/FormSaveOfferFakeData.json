@@ -1,0 +1,9 @@
+
+{
+  "title":"computrabajo",
+  "description": "java dev with 100 years of experience",
+  "requirements": "java, spring boot, docker, bd, kafka",
+  "data_created": "2024-12-12",
+  "active": true,
+  "email": "hola@gmail.com"
+}

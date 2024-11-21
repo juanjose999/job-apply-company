@@ -1,5 +1,6 @@
 package com.job.repository.myuser;
 
+import com.job.entities.offer.Offer;
 import com.job.entities.user.MyUser;
 
 import java.util.List;
@@ -9,6 +10,7 @@ public interface IMyUserRepository {
     List<MyUser> allUser();
     Optional<MyUser> findUserByEmail(String email);
     MyUser saveUser(MyUser user);
+    String myUserApplyOffer(MyUser user, Offer offer);
     Optional<MyUser> updateUser(String email, MyUser user);
     boolean deleteUser(String email);
 }

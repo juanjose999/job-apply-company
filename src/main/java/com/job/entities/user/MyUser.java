@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,6 +21,5 @@ public class MyUser {
     private String last_name;
     private String email;
     private String password;
-    @ManyToMany(mappedBy = "user")
-    private List<Offer> offer;
+
 }

@@ -46,10 +46,19 @@ public class OfferServiceImpl implements IOfferService {
 
     @Override
     public OfferResponseDto saveOffer(FormSaveOffer formSaveOffer) throws CompanyNotFoundException {
-        Company company = companyRepository.findCompanyByEmail(formSaveOffer.emailCompany()).orElseThrow(() -> new CompanyNotFoundException("Company not found with email " + formSaveOffer.emailCompany()));
+        Company company = companyRepository.findCompanyByEmail(formSaveOffer.emailCompany())
+                .orElseThrow(() -> new CompanyNotFoundException("Company not found with email " + formSaveOffer.emailCompany()));
+
+        OfferDto offerDto = OfferDto.builder()
+                .title(formSaveOffer.title())
+                .description(formSaveOffer.description())
+                .requirements(formSaveOffer.requirements())
+                .date_create(formSaveOffer.date_created())
+                .active(formSaveOffer.active())
+                .build();
+
         return OfferMapper.offerToOfferResponseDto(
-                offerRepository.saveOffer(OfferMapper.offerDtoToOffer(formSaveOffer.offerDto()), company)
-        );
+                offerRepository.saveOffer(OfferMapper.offerDtoToOffer(offerDto),company));
     }
 
     @Override

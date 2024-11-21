@@ -5,7 +5,11 @@ import com.job.entities.user.MyUser;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,11 +28,13 @@ public class Offer {
     private boolean active;
     @ManyToOne
     private Company company;
-    @ManyToMany
-    @JoinTable(
-            name = "apply_offer",
-            joinColumns = @JoinColumn(name ="offer_id"),
-            inverseJoinColumns = @JoinColumn(name ="user_id")
-    )
-    private List<MyUser> user;
+
+    private void setDate_created() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        this.date_created = String.valueOf(LocalDateTime.now().format(formatter));
+    }
+
+    private void setActive() {
+        this.active = true;
+    }
 }

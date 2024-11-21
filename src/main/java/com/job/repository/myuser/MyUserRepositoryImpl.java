@@ -1,6 +1,10 @@
 package com.job.repository.myuser;
 
+import com.job.entities.apply.OfferApplyUser;
+import com.job.entities.offer.Offer;
 import com.job.entities.user.MyUser;
+import com.job.repository.IApplyOffer;
+import com.job.repository.IApplyOfferJpa;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +16,7 @@ import java.util.Optional;
 public class MyUserRepositoryImpl implements IMyUserRepository{
 
     private final IMyUserRepositoryJpa  myUserRepositoryJpa;
+    private final IApplyOffer applyOffer;
 
     @Override
     public List<MyUser> allUser() {
@@ -26,6 +31,11 @@ public class MyUserRepositoryImpl implements IMyUserRepository{
     @Override
     public MyUser saveUser(MyUser user) {
         return myUserRepositoryJpa.save(user);
+    }
+
+    @Override
+    public String myUserApplyOffer(MyUser user, Offer offer) {
+        return applyOffer.userApplyOffer(user, offer);
     }
 
     @Override

@@ -30,6 +30,11 @@ public class OfferRepositoryImpl implements IOfferRepository {
     }
 
     @Override
+    public Optional<Offer> findOfferById(Long id) {
+        return offerRepository.findById(id);
+    }
+
+    @Override
     public Optional<List<Offer>> findOfferByTitle(String title) {
         return offerRepository.findByTitle(title);
     }
