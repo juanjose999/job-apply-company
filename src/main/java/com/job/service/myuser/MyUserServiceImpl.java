@@ -59,8 +59,14 @@ public class MyUserServiceImpl implements IMyUserService {
 
     @Override
     public MyUserResponseDto updateUser(FormUpdateUser formUpdateUser) throws MyUserNotFoundException {
+        MyUserDto userDto = MyUserDto.builder()
+                .first_name(formUpdateUser.first_name())
+                .last_name(formUpdateUser.last_name())
+                .email(formUpdateUser.email())
+                .password(formUpdateUser.password())
+                .build();
         return MyUserMapper.UserToUserDto(
-                myUserRepository.updateUser(formUpdateUser.email(), MyUserMapper.UserDtoToUser(formUpdateUser.userDto()))
+                myUserRepository.updateUser(formUpdateUser.emailFindUser(), MyUserMapper.UserDtoToUser(userDto))
                         .orElseThrow(()->new MyUserNotFoundException("User not found with email: " + formUpdateUser.email() ))
         );
     }

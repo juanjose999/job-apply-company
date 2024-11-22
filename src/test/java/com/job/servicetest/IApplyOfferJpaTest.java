@@ -1,9 +1,8 @@
-package com.job;
+package com.job.servicetest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.job.entities.company.Company;
 import com.job.entities.offer.Offer;
-import com.job.entities.offer.dto.FormSaveOffer;
 import com.job.entities.offer.dto.OfferDto;
 import com.job.entities.offer.dto.OfferMapper;
 import com.job.entities.user.MyUser;
@@ -22,7 +21,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.userdetails.User;
 
 import java.io.File;
 import java.io.IOException;

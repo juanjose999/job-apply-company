@@ -1,12 +1,10 @@
-package com.job;
+package com.job.servicetest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.job.entities.company.Company;
 import com.job.entities.company.dto.CompanyDto;
 import com.job.entities.company.dto.CompanyMapper;
 import com.job.entities.offer.Offer;
 import com.job.entities.offer.dto.*;
-import com.job.entities.user.dto.MyUserDto;
 import com.job.exception.CompanyNotFoundException;
 import com.job.exception.OfferNotFoundException;
 import com.job.repository.company.ICompanyRepository;
@@ -18,7 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

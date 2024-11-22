@@ -1,10 +1,7 @@
-package com.job;
+package com.job.servicetest;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
 import com.job.entities.user.MyUser;
 import com.job.entities.user.dto.FormUpdateUser;
 import com.job.entities.user.dto.MyUserDto;
@@ -20,9 +17,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;

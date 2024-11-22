@@ -1,4 +1,4 @@
-package com.job;
+package com.job.servicetest;
 
 import com.job.entities.company.Company;
 import com.job.entities.company.dto.CompanyDto;
