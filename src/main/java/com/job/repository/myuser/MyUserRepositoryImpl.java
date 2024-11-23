@@ -3,8 +3,7 @@ package com.job.repository.myuser;
 import com.job.entities.apply.OfferApplyUser;
 import com.job.entities.offer.Offer;
 import com.job.entities.user.MyUser;
-import com.job.repository.IApplyOffer;
-import com.job.repository.IApplyOfferJpa;
+import com.job.repository.apply.IApplyOffer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -34,7 +33,7 @@ public class MyUserRepositoryImpl implements IMyUserRepository{
     }
 
     @Override
-    public String myUserApplyOffer(MyUser user, Offer offer) {
+    public OfferApplyUser myUserApplyOffer(MyUser user, Offer offer) {
         return applyOffer.userApplyOffer(user, offer);
     }
 

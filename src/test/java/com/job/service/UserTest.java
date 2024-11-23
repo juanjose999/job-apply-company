@@ -1,4 +1,4 @@
-package com.job.servicetest;
+package com.job.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -93,13 +93,11 @@ public class UserTest {
                 .password("000")
                 .build();
         FormUpdateUser formUpdateUser = FormUpdateUser.builder()
+                .emailFindUser(userDto.email())
+                .first_name("juan jose")
+                .last_name("sierra")
                 .email("carlos@gmail.com")
-                .userDto(MyUserDto.builder()
-                        .first_name("juan jose")
-                        .last_name("sierra")
-                        .email("carlos@gmail.com")
-                        .password("000")
-                        .build())
+                .password("000")
                 .build();
 
         when(userRepository.updateUser(any(String.class), any(MyUser.class))).thenReturn(Optional.of(updateIsOk));

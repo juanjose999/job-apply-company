@@ -1,7 +1,8 @@
 package com.job.service.myuser;
 
-import com.job.entities.offer.Offer;
-import com.job.entities.user.MyUser;
+import com.job.entities.apply.dto.FormResponseApplyOffer;
+import com.job.entities.apply.dto.FormUserApplyOffer;
+import com.job.entities.apply.OfferApplyUser;
 import com.job.entities.user.dto.FormUpdateUser;
 import com.job.entities.user.dto.MyUserDto;
 import com.job.entities.user.dto.MyUserResponseDto;
@@ -15,7 +16,7 @@ public interface IMyUserService {
     List<MyUserResponseDto> allUser();
     MyUserResponseDto findUserByEmail(String email) throws MyUserNotFoundException;
     MyUserResponseDto saveUser(MyUserDto userDto);
-    String userApplyOffer(String emailUser, Long idOffer) throws MyUserNotFoundException, OfferNotFoundException, OfferIsDesactiveException;
+    FormResponseApplyOffer userApplyOffer(FormUserApplyOffer formUserApplyOffer) throws MyUserNotFoundException, OfferNotFoundException, OfferIsDesactiveException;
     MyUserResponseDto updateUser(FormUpdateUser formUpdateUser) throws MyUserNotFoundException;
     boolean deleteUser(String email) throws MyUserNotFoundException;
 }

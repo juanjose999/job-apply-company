@@ -1,4 +1,4 @@
-package com.job.servicetest;
+package com.job.service;
 
 import com.job.entities.company.Company;
 import com.job.entities.company.dto.CompanyDto;
@@ -32,7 +32,7 @@ public class CompanyTest {
     @Test
     public void should_saveCompany_return_companyDto(){
         CompanyDto formSaveCompany = CompanyDto.builder()
-                .fullName("hola company")
+                .full_name("hola company")
                 .email("hola@gmail.com")
                 .password("123xxx")
                 .build();
@@ -57,7 +57,7 @@ public class CompanyTest {
         String findEmail = "hola@gmail.com";
         CompanyDto formSaveCompany = CompanyDto.builder()
                 .email(findEmail)
-                .fullName("hola company")
+                .full_name("hola company")
                 .password("123xxx")
                 .build();
         Company companyObj = CompanyMapper.CompanyDtoToCompany(formSaveCompany);
@@ -125,7 +125,7 @@ public class CompanyTest {
     public void should_deleteCompanyByEmail_return_true(){
         String findEmail = "hola@mail.com";
         CompanyDto formSaveCompany = CompanyDto.builder()
-                .fullName("hola company")
+                .full_name("hola company")
                 .email(findEmail)
                 .password("123xxx")
                 .build();

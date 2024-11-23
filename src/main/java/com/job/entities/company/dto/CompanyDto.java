@@ -3,5 +3,5 @@ package com.job.entities.company.dto;
 import lombok.Builder;
 
 @Builder
-public record CompanyDto(String fullName, String email, String password) {
+public record CompanyDto(String full_name, String email, String password) {
 }

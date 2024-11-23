@@ -1,4 +1,4 @@
-package com.job.servicetest;
+package com.job.service;
 
 import com.job.entities.company.Company;
 import com.job.entities.company.dto.CompanyDto;
@@ -43,7 +43,7 @@ public class OfferTest {
     public void should_create_offerDto_insideCompany_return_offerResponseDto() throws CompanyNotFoundException, IOException {
         // formulario de registro de compañia
         CompanyDto formSaveCompany = CompanyDto.builder()
-                .fullName("hola company")
+                .full_name("hola company")
                 .email("hola@gmail.com")
                 .password("123xxx")
                 .build();
@@ -130,7 +130,7 @@ public class OfferTest {
     @Test
     public void should_findAllOffer_byCompany_return_company_ListOfferResponseDto() throws CompanyNotFoundException {
         CompanyDto formSaveCompany = CompanyDto.builder()
-                .fullName("hola company")
+                .full_name("hola company")
                 .email("hola@gmail.com")
                 .password("123xxx")
                 .build();
@@ -192,7 +192,7 @@ public class OfferTest {
     @Test
     public void should_offerByTitle_return_offerResponseDto() throws OfferNotFoundException {
         CompanyDto formSaveCompany = CompanyDto.builder()
-                .fullName("hola company")
+                .full_name("hola company")
                 .email("hola@gmail.com")
                 .password("123xxx")
                 .build();
@@ -232,7 +232,7 @@ public class OfferTest {
     @Test
     public void should_updateOfferByEmailCompany_return_offerResponseDto() throws CompanyNotFoundException {
         CompanyDto formSaveCompany = CompanyDto.builder()
-                .fullName("hola company")
+                .full_name("hola company")
                 .email("hola@gmail.com")
                 .password("123xxx")
                 .build();
@@ -284,7 +284,7 @@ public class OfferTest {
     @Test
     public void should_deleteOfferByIdWithCompany_return_true() throws CompanyNotFoundException {
         CompanyDto formSaveCompany = CompanyDto.builder()
-                .fullName("hola company")
+                .full_name("hola company")
                 .email("hola@gmail.com")
                 .password("123xxx")
                 .build();

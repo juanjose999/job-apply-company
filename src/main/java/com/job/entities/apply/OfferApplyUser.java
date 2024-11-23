@@ -11,6 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
+@Table(name = "apply")
 public class OfferApplyUser {
 
     @Id
