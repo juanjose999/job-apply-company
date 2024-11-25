@@ -106,19 +106,20 @@ public class CompanyTest {
                 .build();
 
         FormUpdateCompany formUpdateCompany = FormUpdateCompany.builder()
-                .email(findEmail)
-                .companyDto(new CompanyDto("bye company","byeoy@gmail.com","bye123"))
+                .emailFindCompany(findEmail)
+                .full_name("bye company")
+                .emailFindCompany("byeoy@gmail.com")
+                .password("bye123")
                 .build();
 
-        when(companyRepository.findCompanyByEmail(findEmail)).thenReturn(Optional.of(company));
-        when(companyRepository.updateCompanyByEmail(eq(findEmail), any(Company.class))).thenReturn(companyUpdate);
+        when(companyRepository.findCompanyByEmail("byeoy@gmail.com")).thenReturn(Optional.of(companyUpdate));
+        when(companyRepository.updateCompanyByEmail(any(String.class), any(Company.class))).thenReturn(companyUpdate);
         CompanyResponseDto companyResponseUpdateIsOk = companyService.updateCompanyByEmail(formUpdateCompany);
 
 
         assertNotNull(companyResponseUpdateIsOk);
         assertEquals("byeoy@gmail.com", companyResponseUpdateIsOk.email());
         assertEquals("bye company", companyResponseUpdateIsOk.fullName());
-
     }
 
     @Test

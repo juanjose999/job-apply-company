@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-@ExtendWith(CompanyController.class)
+@WebMvcTest(CompanyController.class)
 public class CompanyControllerTest {
 
     @Autowired
@@ -66,12 +67,14 @@ public class CompanyControllerTest {
                 .fullName(companyDto.full_name())
                 .email(companyDto.email())
                 .build();
+        String email = "hola@gmail.com";
 
-        Mockito.when(companyService.findCompanyByEmail(companyDto.email())).thenReturn(companyResponseDto);
+        Mockito.when(companyService.saveCompany(companyDto)).thenReturn(companyResponseDto);
+        Mockito.when(companyService.findCompanyByEmail("hola@gmail.com")).thenReturn(companyResponseDto);
 
-        mockMvc.perform(get("/v1/companys/email")
+        mockMvc.perform(get("/v1/company/email")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(companyDto.email())))
+                .content(email))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.fullName").value(companyDto.full_name()))
                 .andExpect(jsonPath("$.email").value(companyDto.email()));
@@ -94,20 +97,19 @@ public class CompanyControllerTest {
                 .newEmailCompany("vectorpixel@gmail.com")
                 .password("mmm")
                 .build();
-        Company company = Company.builder()
-                .full_name("vector pixel sas")
+        CompanyResponseDto companyResponseDto1 = CompanyResponseDto.builder()
+                .fullName("vector pixel sas")
                 .email("vectorpixel@gmail.com")
-                .password("mmm")
                 .build();
 
-        Mockito.when(companyService.updateCompanyByEmail(formUpdateCompany)).thenReturn(CompanyMapper.CompanyToCompanyResponseDto(company));
+        Mockito.when(companyService.updateCompanyByEmail(formUpdateCompany)).thenReturn(companyResponseDto1);
 
-        mockMvc.perform(put("/v1/companys")
+        mockMvc.perform(put("/v1/company/email")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(formUpdateCompany)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.fullName").value(company.getFull_name()))
-                .andExpect(jsonPath("$.email").value(company.getEmail()));
+                .andExpect(jsonPath("$.fullName").value(companyResponseDto1.fullName()))
+                .andExpect(jsonPath("$.email").value(companyResponseDto1.email()));
 
         Mockito.verify(companyService).updateCompanyByEmail(formUpdateCompany);
     }
@@ -117,12 +119,18 @@ public class CompanyControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         File readerCompany = new File("src/test/java/resource/CompanyDtoFakeData.json");
         CompanyDto companyDto = objectMapper.readValue(readerCompany, CompanyDto.class);
+        CompanyResponseDto companyResponseDto1 = CompanyResponseDto.builder()
+                .fullName(companyDto.full_name())
+                .email(companyDto.email())
+                .build();
+        String email = "hola@gmail.com";
 
-        Mockito.when(companyService.deleteCompanyByEmail(companyDto.email())).thenReturn(true);
+        Mockito.when(companyService.saveCompany(companyDto)).thenReturn(companyResponseDto1);
+        Mockito.when(companyService.deleteCompanyByEmail(email)).thenReturn(true);
 
-        mockMvc.perform(delete("/v1/companys/email")
+        mockMvc.perform(delete("/v1/company/email")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(companyDto.email())))
+                .content(email))
                 .andExpect(status().isOk());
 
         Mockito.verify(companyService).deleteCompanyByEmail(companyDto.email());
@@ -135,12 +143,13 @@ public class CompanyControllerTest {
 
         Mockito.when(companyService.deleteCompanyByEmail(emailNotExist)).thenReturn(false);
 
-        mockMvc.perform(delete("/v1/companys/email")
+        mockMvc.perform(delete("/v1/company/email")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(emailNotExist)))
+                .content(emailNotExist))
                 .andExpect(status().isNotFound());
 
         Mockito.verify(companyService).deleteCompanyByEmail(emailNotExist);
     }
+
 
 }
