@@ -42,9 +42,11 @@ public class CompanyServiceImpl implements ICompanyService{
 
     @Override
     public CompanyResponseDto updateCompanyByEmail(FormUpdateCompany formUpdateCompany) throws CompanyNotFoundException {
-        Company company = companyRepository.findCompanyByEmail(formUpdateCompany.email())
-                .orElseThrow(() -> new CompanyNotFoundException("Company not found with email " + formUpdateCompany.email()));
-        return CompanyMapper.CompanyToCompanyResponseDto(companyRepository.updateCompanyByEmail(formUpdateCompany.email(), CompanyMapper.CompanyDtoToCompany(formUpdateCompany.companyDto())));
+        Company company = companyRepository.findCompanyByEmail(formUpdateCompany.emailFindCompany())
+                .orElseThrow(() -> new CompanyNotFoundException("Company not found with email " + formUpdateCompany.emailFindCompany()));
+        return CompanyMapper.CompanyToCompanyResponseDto(
+                companyRepository.updateCompanyByEmail(formUpdateCompany.emailFindCompany(),
+                        CompanyMapper.CompanyDtoToCompany(new CompanyDto(formUpdateCompany.full_name(), formUpdateCompany.newEmailCompany(), formUpdateCompany.password()))));
     }
 
     @Override
