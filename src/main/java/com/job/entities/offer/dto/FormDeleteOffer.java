@@ -3,5 +3,5 @@ package com.job.entities.offer.dto;
 import lombok.Builder;
 
 @Builder
-public record FormDeleteOffer(String nameOffer, String emailCompany) {
+public record FormDeleteOffer(Long idOffer, String emailCompany) {
 }

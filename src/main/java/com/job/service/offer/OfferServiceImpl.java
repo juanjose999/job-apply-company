@@ -29,6 +29,12 @@ public class OfferServiceImpl implements IOfferService {
     }
 
     @Override
+    public OfferResponseDto findOfferById(Long id) throws OfferNotFoundException {
+        return OfferMapper.offerToOfferResponseDto(offerRepository.findOfferById(id).orElseThrow(() -> new OfferNotFoundException("Offer not found with id " + id)));
+    }
+
+
+    @Override
     public List<OfferResponseDto> findAllOffersInsideCompany(String emailCompany) throws CompanyNotFoundException {
         Company findCompany = companyRepository.findCompanyByEmail(emailCompany).orElseThrow(() -> new CompanyNotFoundException("Company not found with email " + emailCompany));
         return offerRepository.findAllOffersInsideCompany(findCompany).stream()
@@ -63,18 +69,28 @@ public class OfferServiceImpl implements IOfferService {
 
     @Override
     public OfferResponseDto updateOffer(FormUpdateOffer formUpdateOffer) throws CompanyNotFoundException {
-        Company findCompany = companyRepository.findCompanyByEmail(formUpdateOffer.emailCompany()).orElseThrow(() -> new CompanyNotFoundException("Company not found with email " + formUpdateOffer.emailCompany()));
+        Company findCompany = companyRepository.findCompanyByEmail(formUpdateOffer.emailCompany())
+                .orElseThrow(() -> new CompanyNotFoundException("Company not found with email " + formUpdateOffer.emailCompany()));
+        OfferDto offerToUpdate = OfferDto.builder()
+                .title(formUpdateOffer.title())
+                .description(formUpdateOffer.description())
+                .requirements(formUpdateOffer.requirements())
+                .date_create(formUpdateOffer.date_create())
+                .active(formUpdateOffer.active())
+                .build();
         if (findCompany != null) {
             return OfferMapper.offerToOfferResponseDto(
                     offerRepository.updateOffer(
-                            formUpdateOffer.idOffer(), OfferMapper.offerDtoToOffer(formUpdateOffer.offerDto()), findCompany)
+                            formUpdateOffer.idOffer(), OfferMapper.offerDtoToOffer(offerToUpdate), findCompany)
             );
         }else throw new CompanyNotFoundException("Company not found with email " + formUpdateOffer.emailCompany());
     }
 
     @Override
-    public boolean deleteOffer(FormDeleteOffer formDeleteOffer) throws CompanyNotFoundException {
-        Optional<Company> findCompany = Optional.ofNullable(companyRepository.findCompanyByEmail(formDeleteOffer.emailCompany()).orElseThrow(() -> new CompanyNotFoundException("Company not found with email " + formDeleteOffer.emailCompany())));
-        return offerRepository.deleteOffer(formDeleteOffer.nameOffer(), findCompany.get());
+    public boolean deleteOffer(FormDeleteOffer formDeleteOffer) throws CompanyNotFoundException, OfferNotFoundException {
+        Optional<Company> findCompany = Optional.ofNullable(companyRepository.findCompanyByEmail(formDeleteOffer.emailCompany())
+                .orElseThrow(() -> new CompanyNotFoundException("Company not found with email " + formDeleteOffer.emailCompany())));
+        Offer offer = offerRepository.findOfferById(formDeleteOffer.idOffer()).orElseThrow(() -> new OfferNotFoundException("Offer not found with id " + formDeleteOffer.idOffer()));
+        return offerRepository.deleteOffer(offer, findCompany.get());
     }
 }

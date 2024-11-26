@@ -14,5 +14,5 @@ public interface IOfferRepository {
     Optional<List<Offer>> findOfferByTitle(String title);
     Offer saveOffer(Offer offer, Company company);
     Offer updateOffer(Long idOffer, Offer offer, Company company);
-    boolean deleteOffer(String nameOffer, Company company);
+    boolean deleteOffer(Offer offer, Company company);
 }

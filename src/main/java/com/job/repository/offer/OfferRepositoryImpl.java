@@ -64,10 +64,10 @@ public class OfferRepositoryImpl implements IOfferRepository {
     }
 
     @Override
-    public boolean deleteOffer(String nameCompany, Company company) {
+    public boolean deleteOffer(Offer offer, Company company) {
         List<Offer> companyOffer = company.getOffer();
-        for(Offer offer : companyOffer) {
-            if(nameCompany.equals(offer.getTitle())) {
+        for(Offer offerCurrent : companyOffer) {
+            if(Objects.equals(offerCurrent.getId(), offer.getId())) {
                 company.getOffer().remove(offer);
                 companyRepository.saveCompany(company);
                 offerRepository.delete(offer);

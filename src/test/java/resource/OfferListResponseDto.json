@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Java full stack dev",
+    "description": "Dev with Java and React and Angular, with 5 years of experience",
+    "requirements": "Java, React, Angular, MySQL",
+    "date_created": "2024-11-20",
+    "active": true,
+    "emailCompany": "company1@gmail.com"
+  },
+  {
+    "title": "Frontend Engineer",
+    "description": "Frontend dev with React and Vue.js, 3 years of experience",
+    "requirements": "React, Vue.js, TypeScript, HTML, CSS",
+    "date_created": "2024-11-21",
+    "active": true,
+    "emailCompany": "company2@gmail.com"
+  },
+  {
+    "title": "Backend Developer",
+    "description": "Backend dev with Java Spring Boot, 7 years of experience",
+    "requirements": "Java, Spring Boot, PostgreSQL, Docker, Kubernetes",
+    "date_created": "2024-11-22",
+    "active": false,
+    "emailCompany": "company3@gmail.com"
+  }
+]
