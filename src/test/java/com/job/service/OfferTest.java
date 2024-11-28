@@ -269,7 +269,11 @@ public class OfferTest {
 
         FormUpdateOffer formUpdateOffer = FormUpdateOffer.builder()
                 .idOffer(1L)
-                .offerDto(offerUpdate)
+                .title(offerUpdate.title())
+                .description(offerUpdate.description())
+                .requirements(offerUpdate.requirements())
+                .date_create(String.valueOf(LocalDateTime.now()))
+                .active(true)
                 .emailCompany("hola@gmail.com")
                 .build();
 
@@ -282,7 +286,7 @@ public class OfferTest {
     }
 
     @Test
-    public void should_deleteOfferByIdWithCompany_return_true() throws CompanyNotFoundException {
+    public void should_deleteOfferByIdWithCompany_return_true() throws CompanyNotFoundException, OfferNotFoundException {
         CompanyDto formSaveCompany = CompanyDto.builder()
                 .full_name("hola company")
                 .email("hola@gmail.com")
@@ -296,12 +300,14 @@ public class OfferTest {
                 .requirements("10 years work in js")
                 .build();
         Offer offer = OfferMapper.offerDtoToOffer(offerDto1);
+        offer.setId(1l);
         company.setOffer(offer);
         offer.setCompany(company);
 
         when(companyRepository.findCompanyByEmail("hola@gmail.com")).thenReturn(Optional.of(company));
-        when(offerRepository.deleteOffer(any(String.class), any(Company.class))).thenReturn(true);
-        boolean resultOfferDelete = offerService.deleteOffer(new FormDeleteOffer("carJs framework", "hola@gmail.com"));
+        when(offerRepository.findOfferById(1l)).thenReturn(Optional.of(offer));
+        when(offerRepository.deleteOffer(any(Offer.class), any(Company.class))).thenReturn(true);
+        boolean resultOfferDelete = offerService.deleteOffer(new FormDeleteOffer(1l, "hola@gmail.com"));
 
         assertTrue(resultOfferDelete);
     }

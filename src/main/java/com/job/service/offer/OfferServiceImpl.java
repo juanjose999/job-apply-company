@@ -33,10 +33,11 @@ public class OfferServiceImpl implements IOfferService {
         return OfferMapper.offerToOfferResponseDto(offerRepository.findOfferById(id).orElseThrow(() -> new OfferNotFoundException("Offer not found with id " + id)));
     }
 
-
     @Override
     public List<OfferResponseDto> findAllOffersInsideCompany(String emailCompany) throws CompanyNotFoundException {
-        Company findCompany = companyRepository.findCompanyByEmail(emailCompany).orElseThrow(() -> new CompanyNotFoundException("Company not found with email " + emailCompany));
+        System.out.println("emailCompany = " + emailCompany);
+        Company findCompany = companyRepository.findCompanyByEmail(emailCompany)
+                .orElseThrow(() -> new CompanyNotFoundException("Company not found with email " + emailCompany));
         return offerRepository.findAllOffersInsideCompany(findCompany).stream()
                 .map(OfferMapper::offerToOfferResponseDto)
                 .toList();
