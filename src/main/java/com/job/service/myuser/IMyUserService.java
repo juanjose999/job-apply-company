@@ -2,13 +2,12 @@ package com.job.service.myuser;
 
 import com.job.entities.apply.dto.FormResponseApplyOffer;
 import com.job.entities.apply.dto.FormUserApplyOffer;
-import com.job.entities.apply.OfferApplyUser;
 import com.job.entities.user.dto.FormUpdateUser;
 import com.job.entities.user.dto.MyUserDto;
 import com.job.entities.user.dto.MyUserResponseDto;
-import com.job.exception.MyUserNotFoundException;
-import com.job.exception.OfferIsDesactiveException;
-import com.job.exception.OfferNotFoundException;
+import com.job.exception.exceptions.MyUserNotFoundException;
+import com.job.exception.exceptions.OfferIsDesactiveException;
+import com.job.exception.exceptions.OfferNotFoundException;
 
 import java.util.List;
 

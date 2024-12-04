@@ -3,7 +3,8 @@ package com.job.service.company;
 import com.job.entities.company.dto.CompanyDto;
 import com.job.entities.company.dto.CompanyResponseDto;
 import com.job.entities.company.dto.FormUpdateCompany;
-import com.job.exception.CompanyNotFoundException;
+import com.job.exception.exceptions.CompanyNotFoundException;
+import io.vavr.control.Either;
 
 import java.util.List;
 

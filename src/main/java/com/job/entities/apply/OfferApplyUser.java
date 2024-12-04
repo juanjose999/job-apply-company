@@ -17,16 +17,19 @@ public class OfferApplyUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private MyUser user;
 
     @ManyToOne
-    @JoinColumn(name = "offer_id")
+    @JoinColumn(name = "offer_id", nullable = false)
     private Offer offer;
 
-    private String date_apply;
     @Enumerated(EnumType.STRING)
     private StatusOffer status;
+
+    private String date_apply;
+
 
 }

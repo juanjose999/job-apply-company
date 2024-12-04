@@ -5,8 +5,8 @@ import com.job.entities.company.dto.CompanyDto;
 import com.job.entities.company.dto.CompanyMapper;
 import com.job.entities.offer.Offer;
 import com.job.entities.offer.dto.*;
-import com.job.exception.CompanyNotFoundException;
-import com.job.exception.OfferNotFoundException;
+import com.job.exception.exceptions.CompanyNotFoundException;
+import com.job.exception.exceptions.OfferNotFoundException;
 import com.job.repository.company.ICompanyRepository;
 import com.job.repository.offer.OfferRepositoryImpl;
 import com.job.service.offer.OfferServiceImpl;
@@ -61,7 +61,6 @@ public class OfferTest {
                 .title("java dev")
                 .description("dev use java and spring boot")
                 .requirements("java, spring, mysql")
-                .date_created(String.valueOf(LocalDateTime.now()))
                 .active(true)
                 .emailCompany("hola@gmail.com")
                 .build();
@@ -114,7 +113,6 @@ public class OfferTest {
                 .title("java dev")
                 .description("dev use java and spring boot")
                 .requirements("java, spring, mysql")
-                .date_created(String.valueOf(LocalDateTime.now()))
                 .active(true)
                 .emailCompany("noexist@gmail.com")
                 .build();
@@ -272,7 +270,6 @@ public class OfferTest {
                 .title(offerUpdate.title())
                 .description(offerUpdate.description())
                 .requirements(offerUpdate.requirements())
-                .date_create(String.valueOf(LocalDateTime.now()))
                 .active(true)
                 .emailCompany("hola@gmail.com")
                 .build();

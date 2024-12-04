@@ -41,7 +41,9 @@ public class OfferRepositoryImpl implements IOfferRepository {
 
     @Override
     public Offer saveOffer(Offer offer,Company company) {
-        Offer offerSaved = offerRepository.save(offer);
+        Offer offerSaved = offer;
+        offerSaved.setDate_created();
+        offerSaved = offerRepository.save(offer);
         company.setOffer(offerSaved);
         companyRepository.saveCompany(company);
         return offerSaved;

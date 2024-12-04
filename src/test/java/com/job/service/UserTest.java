@@ -7,7 +7,7 @@ import com.job.entities.user.dto.FormUpdateUser;
 import com.job.entities.user.dto.MyUserDto;
 import com.job.entities.user.dto.MyUserMapper;
 import com.job.entities.user.dto.MyUserResponseDto;
-import com.job.exception.MyUserNotFoundException;
+import com.job.exception.exceptions.MyUserNotFoundException;
 import com.job.repository.myuser.MyUserRepositoryImpl;
 import com.job.service.myuser.MyUserServiceImpl;
 import org.junit.jupiter.api.Test;

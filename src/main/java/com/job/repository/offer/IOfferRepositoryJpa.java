@@ -1,5 +1,6 @@
 package com.job.repository.offer;
 
+import com.job.entities.apply.OfferApplyUser;
 import com.job.entities.offer.Offer;
 import org.springframework.data.jpa.repository.JpaRepository;
 

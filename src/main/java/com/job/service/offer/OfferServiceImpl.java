@@ -3,14 +3,14 @@ package com.job.service.offer;
 import com.job.entities.company.Company;
 import com.job.entities.offer.Offer;
 import com.job.entities.offer.dto.*;
-import com.job.exception.CompanyNotFoundException;
-import com.job.exception.OfferNotFoundException;
+import com.job.exception.exceptions.CompanyNotFoundException;
+import com.job.exception.exceptions.OfferNotFoundException;
 import com.job.repository.company.ICompanyRepository;
 import com.job.repository.offer.IOfferRepository;
-import com.job.service.company.ICompanyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,7 +60,6 @@ public class OfferServiceImpl implements IOfferService {
                 .title(formSaveOffer.title())
                 .description(formSaveOffer.description())
                 .requirements(formSaveOffer.requirements())
-                .date_create(formSaveOffer.date_created())
                 .active(formSaveOffer.active())
                 .build();
 

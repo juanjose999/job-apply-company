@@ -8,9 +8,9 @@ import com.job.entities.user.dto.FormUpdateUser;
 import com.job.entities.user.dto.MyUserDto;
 import com.job.entities.user.dto.MyUserMapper;
 import com.job.entities.user.dto.MyUserResponseDto;
-import com.job.exception.MyUserNotFoundException;
-import com.job.exception.OfferIsDesactiveException;
-import com.job.exception.OfferNotFoundException;
+import com.job.exception.exceptions.MyUserNotFoundException;
+import com.job.exception.exceptions.OfferIsDesactiveException;
+import com.job.exception.exceptions.OfferNotFoundException;
 import com.job.repository.apply.IApplyOfferJpa;
 import com.job.repository.myuser.IMyUserRepository;
 import com.job.repository.offer.IOfferRepository;
@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

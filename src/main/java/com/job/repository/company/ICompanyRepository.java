@@ -1,7 +1,7 @@
 package com.job.repository.company;
 
 import com.job.entities.company.Company;
-import com.job.exception.CompanyNotFoundException;
+import com.job.exception.exceptions.CompanyNotFoundException;
 
 import java.util.List;
 import java.util.Optional;

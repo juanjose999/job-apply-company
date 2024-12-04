@@ -55,14 +55,13 @@ public class OfferControllerTest {
                 .description(offerDtoNotSaved.description())
                 .requirements(offerDtoNotSaved.requirements())
                 .active(offerDtoNotSaved.active())
-                .date_created(offerDtoNotSaved.date_create())
                 .emailCompany("hola@gmail.com")
                 .build();
         OfferResponseDto offerResponseDto = OfferResponseDto.builder()
                 .title(offerDtoNotSaved.title())
                 .description(offerDtoNotSaved.description())
                 .requirements(offerDtoNotSaved.requirements())
-                .date_create(offerDtoNotSaved.date_create())
+                .date_create(String.valueOf(LocalDateTime.now()))
                 .build();
 
         String jsonSaved = objectMapper.writeValueAsString(formSaveOffer);
@@ -200,7 +199,6 @@ public class OfferControllerTest {
                 .description(offerDto.description())
                 .requirements(offerDto.requirements())
                 .active(offerDto.active())
-                .date_created(offerDto.date_create())
                 .emailCompany(email)
                 .build();
 

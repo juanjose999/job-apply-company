@@ -5,7 +5,7 @@ import com.job.entities.company.dto.CompanyDto;
 import com.job.entities.company.dto.CompanyMapper;
 import com.job.entities.company.dto.CompanyResponseDto;
 import com.job.entities.company.dto.FormUpdateCompany;
-import com.job.exception.CompanyNotFoundException;
+import com.job.exception.exceptions.CompanyNotFoundException;
 import com.job.repository.company.ICompanyRepositoryImpl;
 import com.job.service.company.CompanyServiceImpl;
 import org.junit.jupiter.api.Test;

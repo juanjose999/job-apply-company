@@ -1,4 +1,4 @@
-package com.job.exception;
+package com.job.exception.exceptions;
 
 public class MyUserNotFoundException extends Exception {
     public MyUserNotFoundException(String msj) {

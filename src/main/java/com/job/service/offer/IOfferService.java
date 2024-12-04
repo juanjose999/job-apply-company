@@ -1,12 +1,10 @@
 package com.job.service.offer;
 
 import com.job.entities.offer.dto.*;
-import com.job.exception.CompanyNotFoundException;
-import com.job.exception.OfferNotFoundException;
-import lombok.Data;
+import com.job.exception.exceptions.CompanyNotFoundException;
+import com.job.exception.exceptions.OfferNotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IOfferService {
     List<OfferResponseDto> findAllOffers();

@@ -5,8 +5,9 @@ import com.job.entities.company.dto.CompanyDto;
 import com.job.entities.company.dto.CompanyMapper;
 import com.job.entities.company.dto.CompanyResponseDto;
 import com.job.entities.company.dto.FormUpdateCompany;
-import com.job.exception.CompanyNotFoundException;
+import com.job.exception.exceptions.CompanyNotFoundException;
 import com.job.repository.company.ICompanyRepository;
+import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,14 +29,12 @@ public class CompanyServiceImpl implements ICompanyService{
     @Override
     public CompanyResponseDto saveCompany(CompanyDto companyDto) {
         return CompanyMapper.CompanyToCompanyResponseDto(
-                companyRepository.saveCompany
-                        (CompanyMapper.CompanyDtoToCompany(companyDto))
-        );
+                companyRepository.saveCompany(CompanyMapper.CompanyDtoToCompany(companyDto)));
     }
 
     @Override
     public CompanyResponseDto findCompanyByEmail(String email) throws CompanyNotFoundException {
-        return CompanyMapper.CompanyToCompanyResponseDto(
+        return CompanyMapper.CompanyToCompanyResponseDtoList(
                 companyRepository.findCompanyByEmail(email)
                         .orElseThrow(() -> new CompanyNotFoundException("Company not found with email " + email)));
     }

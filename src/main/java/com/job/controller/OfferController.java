@@ -1,11 +1,10 @@
 package com.job.controller;
 
 import com.job.entities.offer.dto.*;
-import com.job.exception.CompanyNotFoundException;
-import com.job.exception.OfferNotFoundException;
+import com.job.exception.exceptions.CompanyNotFoundException;
+import com.job.exception.exceptions.OfferNotFoundException;
 import com.job.service.offer.IOfferService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
