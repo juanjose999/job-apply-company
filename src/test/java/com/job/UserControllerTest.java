@@ -1,4 +1,4 @@
-package com.job.controller;
+package com.job;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.job.entities.apply.dto.FormResponseApplyOffer;
@@ -16,6 +16,7 @@ import com.job.entities.user.dto.MyUserMapper;
 import com.job.entities.user.dto.MyUserResponseDto;
 import com.job.exception.exceptions.MyUserNotFoundException;
 import com.job.service.myuser.MyUserServiceImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -44,67 +45,54 @@ public class UserControllerTest {
     @MockBean
     private MyUserServiceImpl userService;
 
+    private ObjectMapper objectMapper;
+    private MyUserDto userDto;
+    private MyUser user;
+    private MyUserResponseDto userResponseDto;
 
-    @Test
-    void should_create_user_return_200() throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
+    @BeforeEach
+    void setUp() throws Exception {
+        objectMapper = new ObjectMapper();
         File readSingleUser = new File("src/test/java/resource/UserDtoSingleFakeData.json");
-
-        MyUserDto userDto = objectMapper.readValue(readSingleUser, MyUserDto.class);
-        MyUserResponseDto userResponseDto = MyUserResponseDto.builder()
+        userDto = objectMapper.readValue(readSingleUser, MyUserDto.class);
+        user = MyUserMapper.UserDtoToUser(userDto);
+        userResponseDto = MyUserResponseDto.builder()
                 .first_name(userDto.first_name())
                 .last_name(userDto.last_name())
                 .email(userDto.email())
                 .build();
-        MyUser user = MyUserMapper.UserDtoToUser(userDto);
-        String json = objectMapper.writeValueAsString(userDto);
+    }
 
-        Mockito.when(userService.saveUser(any(MyUserDto.class))).thenReturn(userResponseDto);
+    @Test
+    void should_create_user_return_200() throws Exception {
+        Mockito.when(userService.saveUser(userDto)).thenReturn(userResponseDto);
 
         mockMvc.perform(post("/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
+                .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.first_name").value(userDto.first_name()))
                 .andExpect(jsonPath("$.last_name").value(userDto.last_name()))
                 .andExpect(jsonPath("$.email").value(userDto.email()));
-        Mockito.verify(userService).saveUser(any(MyUserDto.class));
+
+        Mockito.verify(userService).saveUser(userDto);
     }
 
     @Test
     void should_findUserByEmail_return_userDto() throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
-        File readSingleUser = new File("src/test/java/resource/UserDtoSingleFakeData.json");
+        Mockito.when(userService.findUserByEmail(userDto.email())).thenReturn(userResponseDto);
 
-        MyUserDto userDto = objectMapper.readValue(readSingleUser, MyUserDto.class);
-        MyUser user = MyUserMapper.UserDtoToUser(userDto);
-        MyUserResponseDto userResponseDto = MyUserResponseDto.builder()
-                .first_name(userDto.first_name())
-                .last_name(userDto.last_name())
-                .email(userDto.email())
-                .build();
-        String json = objectMapper.writeValueAsString(user);
-        String email = user.getEmail();
-
-        Mockito.when(userService.findUserByEmail(email)).thenReturn(userResponseDto);
-
-        mockMvc.perform(get("/v1/users/email")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(email))
+        mockMvc.perform(get("/v1/users/email/{email}", userDto.email()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.first_name").value(userDto.first_name()))
                 .andExpect(jsonPath("$.last_name").value(userDto.last_name()))
                 .andExpect(jsonPath("$.email").value(userDto.email()));
 
-        Mockito.verify(userService).findUserByEmail(any(String.class));
+        Mockito.verify(userService).findUserByEmail(userDto.email());
     }
 
     @Test
     void should_update_user_return_200() throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
-        File readSingleUser = new File("src/test/java/resource/UserDtoSingleFakeData.json");
-
-        MyUserDto userDto = objectMapper.readValue(readSingleUser, MyUserDto.class);
         FormUpdateUser formUpdateUser = FormUpdateUser.builder()
                 .emailFindUser(userDto.email())
                 .first_name("benek")
@@ -112,7 +100,7 @@ public class UserControllerTest {
                 .email("benek@gmail.com")
                 .password("222xxx")
                 .build();
-        String jsonToUpdate = objectMapper.writeValueAsString(formUpdateUser);
+
         MyUserResponseDto userResponseDto = MyUserResponseDto.builder()
                 .first_name(formUpdateUser.first_name())
                 .last_name(formUpdateUser.last_name())
@@ -120,68 +108,61 @@ public class UserControllerTest {
                 .build();
 
         Mockito.when(userService.updateUser(formUpdateUser)).thenReturn(userResponseDto);
-
         mockMvc.perform(put("/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonToUpdate))
+                .content(objectMapper.writeValueAsString(formUpdateUser)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.first_name").value("benek"))
                 .andExpect(jsonPath("$.last_name").value("spring"))
                 .andExpect(jsonPath("$.email").value("benek@gmail.com"));
 
+        Mockito.verify(userService).updateUser(formUpdateUser);
     }
 
     @Test
     void should_userApplyOffer_return_200() throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
-        File readSingleUser = new File("src/test/java/resource/UserDtoSingleFakeData.json");
-        File readSingleOffer = new File("src/test/java/resource/OfferDtoFakeData.json");
-        File readSingleCompany = new File("src/test/java/resource/CompanyDtoFakeData.json");
-
-        MyUserDto userDto = objectMapper.readValue(readSingleUser, MyUserDto.class);
         MyUser user = MyUserMapper.UserDtoToUser(userDto);
 
+        File readSingleOffer = new File("src/test/java/resource/OfferDtoFakeData.json");
         OfferDto offerDto = objectMapper.readValue(readSingleOffer, OfferDto.class);
         Offer offer = OfferMapper.offerDtoToOffer(offerDto);
-        offer.setId(1l);
+        offer.setId(1L);
 
+        File readSingleCompany = new File("src/test/java/resource/CompanyDtoFakeData.json");
         CompanyDto companyDto = objectMapper.readValue(readSingleCompany, CompanyDto.class);
         Company company = CompanyMapper.CompanyDtoToCompany(companyDto);
+
         FormUserApplyOffer applyOffer = FormUserApplyOffer.builder()
                 .emailUser(user.getEmail())
                 .idOffer(1L)
                 .build();
-        String jsonRequest = objectMapper.writeValueAsString(applyOffer);
+
+        FormResponseApplyOffer responseApplyOffer = FormResponseApplyOffer.builder()
+                .name_offer(offer.getTitle())
+                .date_apply(String.valueOf(LocalDateTime.now()))
+                .state("PENDING")
+                .build();
 
         Mockito.when(userService.userApplyOffer(applyOffer)).thenReturn(new FormResponseApplyOffer(offer.getTitle(), String.valueOf(LocalDateTime.now()), "PENDING"));
         mockMvc.perform(post("/v1/users/apply-offer")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonRequest))
-                .andExpect(status().isCreated());
+                .content(objectMapper.writeValueAsString(applyOffer)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name_offer").value(offer.getTitle()));
+
+        Mockito.verify(userService).userApplyOffer(applyOffer);
     }
 
     @Test
     void should_delete_user_return_200() throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
-        File readSingleUser = new File("src/test/java/resource/UserDtoSingleFakeData.json");
-
-        MyUserDto userDto = objectMapper.readValue(readSingleUser, MyUserDto.class);
-        MyUser user = MyUserMapper.UserDtoToUser(userDto);
-        MyUserResponseDto userResponseDto = MyUserResponseDto.builder()
-                .first_name(userDto.first_name())
-                .last_name(userDto.last_name())
-                .email(userDto.email())
-                .build();
-        String jsonEmailRequest = objectMapper.writeValueAsString(user.getEmail());
-
-        Mockito.when(userService.deleteUser(jsonEmailRequest)).thenReturn(true);
-
+        Mockito.when(userService.findUserByEmail(userDto.email())).thenReturn(userResponseDto);
+        Mockito.when(userService.deleteUser(userDto.email())).thenReturn(true);
         mockMvc.perform(delete("/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content( jsonEmailRequest ))
+                .content(userDto.email()))
                 .andExpect(status().isOk());
 
-        Mockito.verify(userService).deleteUser(jsonEmailRequest);
+        Mockito.verify(userService).deleteUser(userDto.email());
     }
 
     @Test

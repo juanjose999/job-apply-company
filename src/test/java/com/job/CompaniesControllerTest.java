@@ -1,8 +1,7 @@
-package com.job.controller;
+package com.job;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.job.entities.company.Company;
 import com.job.entities.company.dto.CompanyDto;
 import com.job.entities.company.dto.CompanyMapper;
 import com.job.entities.company.dto.CompanyResponseDto;

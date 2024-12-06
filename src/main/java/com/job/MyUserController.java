@@ -1,4 +1,4 @@
-package com.job.controller;
+package com.job;
 
 import com.job.entities.apply.dto.FormResponseApplyOffer;
 import com.job.entities.apply.dto.FormUserApplyOffer;
@@ -28,9 +28,9 @@ public class MyUserController {
         return ResponseEntity.ok(myUserService.allUser());
     }
 
-    @GetMapping("/email")
-    public ResponseEntity<MyUserResponseDto> getUserByEmail(@RequestBody String emailUser) throws MyUserNotFoundException {
-        return ResponseEntity.ok(myUserService.findUserByEmail(emailUser));
+    @GetMapping("/email/{email}")
+    public ResponseEntity<MyUserResponseDto> findUserByEmail(@PathVariable String email) throws MyUserNotFoundException {
+        return ResponseEntity.ok(myUserService.findUserByEmail(email));
     }
 
     @PostMapping

@@ -1,4 +1,4 @@
-package com.job.controller;
+package com.job;
 
 import com.job.entities.offer.dto.*;
 import com.job.exception.exceptions.CompanyNotFoundException;

@@ -1,4 +1,4 @@
-package com.job.controller;
+package com.job;
 
 import com.job.entities.company.dto.CompanyDto;
 import com.job.entities.company.dto.CompanyResponseDto;
