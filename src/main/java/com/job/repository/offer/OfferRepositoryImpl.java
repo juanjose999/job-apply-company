@@ -49,6 +49,12 @@ public class OfferRepositoryImpl implements IOfferRepository {
     }
 
     @Override
+    public Optional<Offer> updateStateActiveOffer (Offer offer, boolean state) {
+        offer.setActive(state);
+        return Optional.of(offerRepository.save(offer));
+    }
+
+    @Override
     public Offer updateOffer(Long idOffer, Offer offer, Company company) {
         Optional<Offer> foundOffer = offerRepository.findById(idOffer);
         Offer offerToUpdate = foundOffer.get();

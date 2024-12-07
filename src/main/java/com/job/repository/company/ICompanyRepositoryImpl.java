@@ -1,6 +1,7 @@
 package com.job.repository.company;
 
 import com.job.entities.company.Company;
+import com.job.entities.offer.Offer;
 import com.job.exception.exceptions.CompanyNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -25,7 +26,7 @@ public class ICompanyRepositoryImpl implements ICompanyRepository {
     }
 
     @Override
-    public Optional<Company> findCompanyByEmail(String email) throws CompanyNotFoundException {
+    public Optional<Company> findCompanyByEmail(String email) {
         return companyRepositoryJpa.findCompanyByEmail(email);
     }
 
@@ -38,6 +39,8 @@ public class ICompanyRepositoryImpl implements ICompanyRepository {
         if(company.getPassword() != null) companyToUpdate.setPassword(company.getPassword());
         return companyRepositoryJpa.save(companyToUpdate);
     }
+
+
 
     @Override
     public boolean deleteCompanyByEmail(String email) {

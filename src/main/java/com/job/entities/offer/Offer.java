@@ -28,7 +28,7 @@ public class Offer {
     @NotBlank(message = "Requirements cannot be empty, please fill out this field")
     private String requirements;
     private String date_created;
-    private boolean active;
+    private boolean isActive;
     @ManyToOne
     private Company company;
 
@@ -40,7 +40,7 @@ public class Offer {
         this.date_created = String.valueOf(LocalDateTime.now().format(formatter));
     }
 
-    private void setActive() {
-        this.active = true;
+    private void setIsActive() {
+        this.isActive = true;
     }
 }

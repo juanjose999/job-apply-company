@@ -47,6 +47,11 @@ public class OfferController {
         return ResponseEntity.ok(offerService.updateOffer(formUpdateOffer));
     }
 
+    @PutMapping("/state")
+    public ResponseEntity<OfferResponseDto> updateOfferState(@RequestBody OfferStatusUpdateForm formUpdateOffer) throws OfferNotFoundException, CompanyNotFoundException {
+        return ResponseEntity.ok(offerService.updateStateActiveOffer(formUpdateOffer));
+    }
+
     @DeleteMapping
     public ResponseEntity<Void> deleteOffer(@RequestBody FormDeleteOffer formDeleteOffer) throws OfferNotFoundException, CompanyNotFoundException {
         return offerService.deleteOffer(formDeleteOffer) ?  ResponseEntity.ok().build() : ResponseEntity.notFound().build();

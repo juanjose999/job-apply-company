@@ -18,7 +18,7 @@ public class OfferMapper {
                 .description(offerDto.description())
                 .requirements(offerDto.requirements())
                 .date_created(offerDto.date_create())
-                .active(offerDto.active())
+                .isActive(offerDto.active())
                 .build();
     }
 

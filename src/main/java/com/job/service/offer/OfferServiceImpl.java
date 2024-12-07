@@ -69,6 +69,21 @@ public class OfferServiceImpl implements IOfferService {
     }
 
     @Override
+    public OfferResponseDto updateStateActiveOffer(OfferStatusUpdateForm offerStatusUpdateForm) throws CompanyNotFoundException, OfferNotFoundException {
+        Company company = companyRepository.findCompanyByEmail(offerStatusUpdateForm.emailCompany())
+                .orElseThrow(() -> new CompanyNotFoundException("Company not found with email " + offerStatusUpdateForm.emailCompany()));
+
+        if (company.getOffer().stream().noneMatch(o -> o.getId().equals(offerStatusUpdateForm.idOffer()))) {
+            throw new OfferNotFoundException("Company does not contain offer with id " + offerStatusUpdateForm.idOffer());
+        }
+
+        Offer findOffer = offerRepository.findOfferById(offerStatusUpdateForm.idOffer())
+                .orElseThrow(() -> new OfferNotFoundException("Offer not found"));
+
+        return OfferMapper.offerToOfferResponseDto(offerRepository.updateStateActiveOffer(findOffer, offerStatusUpdateForm.state()).get());
+    }
+
+    @Override
     public OfferResponseDto updateOffer(FormUpdateOffer formUpdateOffer) throws CompanyNotFoundException {
         Company findCompany = companyRepository.findCompanyByEmail(formUpdateOffer.emailCompany())
                 .orElseThrow(() -> new CompanyNotFoundException("Company not found with email " + formUpdateOffer.emailCompany()));

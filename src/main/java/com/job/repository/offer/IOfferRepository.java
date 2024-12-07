@@ -13,6 +13,7 @@ public interface IOfferRepository {
     Optional<Offer> findOfferById(Long id);
     Optional<Set<Offer>> findOfferByTitle(String title);
     Offer saveOffer(Offer offer, Company company);
+    Optional<Offer> updateStateActiveOffer (Offer offer, boolean state);
     Offer updateOffer(Long idOffer, Offer offer, Company company);
     boolean deleteOffer(Offer offer, Company company);
 }
