@@ -1,7 +1,7 @@
 package com.job.repository.apply;
 
-import com.job.entities.apply.OfferApplyUser;
-import com.job.entities.apply.StatusOffer;
+import com.job.entities.offer_apply_user.OfferApplyUser;
+import com.job.entities.offer_apply_user.StatusOffer;
 import com.job.entities.offer.Offer;
 import com.job.entities.user.MyUser;
 import com.job.exception.exceptions.OfferNotFoundException;
@@ -18,15 +18,13 @@ public class ApplyOfferImpl implements IApplyOffer{
 
     private final IApplyOfferJpa applyOfferJpa;
 
-
-
     @Override
     public OfferApplyUser userApplyOffer(MyUser user, Offer offer) {
         OfferApplyUser offerApplyUser = OfferApplyUser.builder()
                 .user(user)
                 .offer(offer)
                 .date_apply(setDateApply())
-                .status(StatusOffer.PENDING)
+                .status(StatusOffer.NO_OPEN)
                 .build();
         return applyOfferJpa.save(offerApplyUser);
     }

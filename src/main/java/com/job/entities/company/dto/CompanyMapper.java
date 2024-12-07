@@ -8,6 +8,8 @@ import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
+
 @RequiredArgsConstructor
 public class CompanyMapper {
 
@@ -37,7 +39,6 @@ public class CompanyMapper {
 
 
     public static CompanyResponseDto CompanyToCompanyResponseDtoList(Company company){
-        List<Offer> offers = company.getOffer();
         return CompanyResponseDto.builder()
                 .fullName(company.getFull_name())
                 .email(company.getEmail())

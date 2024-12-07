@@ -2,12 +2,14 @@ package com.job;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.job.controller.CompanyController;
 import com.job.entities.company.dto.CompanyDto;
 import com.job.entities.company.dto.CompanyMapper;
 import com.job.entities.company.dto.CompanyResponseDto;
 import com.job.entities.company.dto.FormUpdateCompany;
 import com.job.exception.exceptions.CompanyNotFoundException;
 import com.job.service.company.CompanyServiceImpl;
+import com.job.service.offer.OfferServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,6 +35,9 @@ public class CompaniesControllerTest {
 
     @MockBean
     private CompanyServiceImpl companyService;
+
+    @MockBean
+    private OfferServiceImpl offerService;
 
     private ObjectMapper objectMapper;
     private CompanyDto companyDto;
@@ -108,7 +113,7 @@ public class CompaniesControllerTest {
 
         Mockito.when(companyService.updateCompanyByEmail(formUpdateCompany)).thenReturn(companyResponseDtoUpdate);
 
-        mockMvc.perform(put("/v1/companies/email")
+        mockMvc.perform(put("/v1/companies")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(formUpdateCompany)))
                 .andExpect(status().isOk())
@@ -133,7 +138,7 @@ public class CompaniesControllerTest {
         Mockito.when(companyService.updateCompanyByEmail(formUpdateCompany))
                 .thenThrow(new CompanyNotFoundException(expectedErrorMessage));
 
-        mockMvc.perform(put("/v1/companies/email")
+        mockMvc.perform(put("/v1/companies")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(formUpdateCompany)))
                 .andExpect(status().isNotFound())
@@ -147,7 +152,7 @@ public class CompaniesControllerTest {
 
         Mockito.when(companyService.deleteCompanyByEmail(emailToDelete)).thenReturn(true);
 
-        mockMvc.perform(delete("/v1/companies/email/{email}", emailToDelete)
+        mockMvc.perform(delete("/v1/companies")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(emailToDelete))
                 .andExpect(status().isOk());
@@ -161,7 +166,7 @@ public class CompaniesControllerTest {
 
         Mockito.when(companyService.deleteCompanyByEmail(emailNotExist)).thenReturn(false);
 
-        mockMvc.perform(delete("/v1/companies/email/{email}", emailNotExist)
+        mockMvc.perform(delete("/v1/companies")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(emailNotExist))
                 .andExpect(status().isNotFound());

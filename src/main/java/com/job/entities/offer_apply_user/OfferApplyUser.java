@@ -1,5 +1,7 @@
-package com.job.entities.apply;
+package com.job.entities.offer_apply_user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.job.entities.offer.Offer;
 import com.job.entities.user.MyUser;
 import jakarta.persistence.*;
@@ -18,10 +20,12 @@ public class OfferApplyUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private MyUser user;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "offer_id", nullable = false)
     private Offer offer;
@@ -30,6 +34,5 @@ public class OfferApplyUser {
     private StatusOffer status;
 
     private String date_apply;
-
 
 }

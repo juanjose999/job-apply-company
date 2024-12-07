@@ -2,15 +2,11 @@ package com.job.repository.offer;
 
 import com.job.entities.company.Company;
 import com.job.entities.offer.Offer;
-import com.job.entities.offer.dto.OfferResponseDto;
 import com.job.repository.company.ICompanyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,12 +16,12 @@ public class OfferRepositoryImpl implements IOfferRepository {
     private final ICompanyRepository companyRepository;
 
     @Override
-    public List<Offer> findAllOffers() {
-        return offerRepository.findAll();
+    public Set<Offer> findAllOffers() {
+        return (Set<Offer>) offerRepository.findAll();
     }
 
     @Override
-    public List<Offer> findAllOffersInsideCompany(Company company) {
+    public Set<Offer> findAllOffersInsideCompany(Company company) {
         return company.getOffer();
     }
 
@@ -35,7 +31,7 @@ public class OfferRepositoryImpl implements IOfferRepository {
     }
 
     @Override
-    public Optional<List<Offer>> findOfferByTitle(String title) {
+    public Optional<Set<Offer>> findOfferByTitle(String title) {
         return offerRepository.findByTitle(title);
     }
 
@@ -43,9 +39,12 @@ public class OfferRepositoryImpl implements IOfferRepository {
     public Offer saveOffer(Offer offer,Company company) {
         Offer offerSaved = offer;
         offerSaved.setDate_created();
+        offerSaved.setCompany(company);
         offerSaved = offerRepository.save(offer);
+
         company.setOffer(offerSaved);
         companyRepository.saveCompany(company);
+
         return offerSaved;
     }
 
@@ -67,7 +66,7 @@ public class OfferRepositoryImpl implements IOfferRepository {
 
     @Override
     public boolean deleteOffer(Offer offer, Company company) {
-        List<Offer> companyOffer = company.getOffer();
+        Set<Offer> companyOffer = company.getOffer();
         for(Offer offerCurrent : companyOffer) {
             if(Objects.equals(offerCurrent.getId(), offer.getId())) {
                 company.getOffer().remove(offer);

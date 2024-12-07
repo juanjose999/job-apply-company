@@ -2,6 +2,7 @@ package com.job;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.job.controller.OfferController;
 import com.job.entities.company.Company;
 import com.job.entities.company.dto.CompanyDto;
 import com.job.entities.company.dto.CompanyResponseDto;

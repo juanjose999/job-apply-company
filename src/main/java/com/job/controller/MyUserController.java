@@ -1,7 +1,8 @@
-package com.job;
+package com.job.controller;
 
-import com.job.entities.apply.dto.FormResponseApplyOffer;
-import com.job.entities.apply.dto.FormUserApplyOffer;
+import com.job.entities.offer_apply_user.OfferApplyUser;
+import com.job.entities.offer_apply_user.dto.FormResponseApplyOffer;
+import com.job.entities.offer_apply_user.dto.FormUserApplyOffer;
 import com.job.entities.user.dto.FormUpdateUser;
 import com.job.entities.user.dto.MyUserDto;
 import com.job.entities.user.dto.MyUserResponseDto;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/users")
+@RequestMapping("/${app.version}/users")
 public class MyUserController {
 
     private final IMyUserService myUserService;
@@ -38,10 +39,15 @@ public class MyUserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(myUserService.saveUser(myUserDto));
     }
 
-    @PostMapping("/apply-offer")
+    @PostMapping("/apply-to-offer")
     public ResponseEntity<FormResponseApplyOffer> userApplyOffer(@RequestBody FormUserApplyOffer formUserApplyOffer)
             throws OfferIsDesactiveException, MyUserNotFoundException, OfferNotFoundException {
         return ResponseEntity.status(HttpStatus.CREATED).body(myUserService.userApplyOffer(formUserApplyOffer));
+    }
+
+    @GetMapping("/applications")
+    public ResponseEntity<List<FormResponseApplyOffer>> findAllApplications(@RequestParam String email) throws MyUserNotFoundException {
+        return ResponseEntity.ok(myUserService.findApplicationByEmail(email));
     }
 
     @PutMapping

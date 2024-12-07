@@ -32,14 +32,11 @@ public class ICompanyRepositoryImpl implements ICompanyRepository {
     @Override
     public Company updateCompanyByEmail(String email, Company company) {
         Optional<Company> companyOptional = companyRepositoryJpa.findCompanyByEmail(email);
-        if(companyOptional.isPresent()) {
-            Company companyToUpdate = companyOptional.get();
-            if(company.getFull_name() != null) companyToUpdate.setFull_name(company.getFull_name());
-            if(company.getEmail() != null) companyToUpdate.setEmail(company.getEmail());
-            if(company.getPassword() != null) companyToUpdate.setPassword(company.getPassword());
-            return companyRepositoryJpa.save(companyToUpdate);
-        }
-        return companyOptional.get();
+        Company companyToUpdate = companyOptional.get();
+        if(company.getFull_name() != null) companyToUpdate.setFull_name(company.getFull_name());
+        if(company.getEmail() != null) companyToUpdate.setEmail(company.getEmail());
+        if(company.getPassword() != null) companyToUpdate.setPassword(company.getPassword());
+        return companyRepositoryJpa.save(companyToUpdate);
     }
 
     @Override

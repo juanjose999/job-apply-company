@@ -1,4 +1,4 @@
-package com.job.entities.apply.dto;
+package com.job.entities.offer_apply_user.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;

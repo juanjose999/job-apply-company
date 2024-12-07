@@ -1,4 +1,4 @@
-package com.job;
+package com.job.controller;
 
 import com.job.entities.offer.dto.*;
 import com.job.exception.exceptions.CompanyNotFoundException;
@@ -21,7 +21,6 @@ public class OfferController {
     public ResponseEntity<List<OfferResponseDto>> getAllOffers() {
         return ResponseEntity.ok(offerService.findAllOffers());
     }
-
 
     @GetMapping("/id/{id}")
     public ResponseEntity<OfferResponseDto> getOfferById(@PathVariable Long id) throws OfferNotFoundException {

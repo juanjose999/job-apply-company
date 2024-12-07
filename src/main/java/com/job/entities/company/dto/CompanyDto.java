@@ -11,5 +11,6 @@ public record CompanyDto( @NotEmpty(message = "name company cannot be empty")
                           @NotEmpty(message = "Email cannot be empty")
                           @Email(message = "Invalid email format")
                           String email,
+                          @NotEmpty(message = "Password cannot be empty, please fill out this field")
                           String password) {
 }

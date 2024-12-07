@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +46,7 @@ public class OfferServiceImpl implements IOfferService {
 
     @Override
     public List<OfferResponseDto> findOfferByTitle(String title) throws OfferNotFoundException {
-        List<Offer> offers = offerRepository.findOfferByTitle(title).orElseThrow(() -> new OfferNotFoundException("Offer not found with title " + title));
+        Set<Offer> offers = offerRepository.findOfferByTitle(title).orElseThrow(() -> new OfferNotFoundException("Offer not found with title " + title));
         return offers.stream()
                 .map(OfferMapper::offerToOfferResponseDto)
                 .toList();
@@ -90,7 +91,10 @@ public class OfferServiceImpl implements IOfferService {
     public boolean deleteOffer(FormDeleteOffer formDeleteOffer) throws CompanyNotFoundException, OfferNotFoundException {
         Optional<Company> findCompany = Optional.ofNullable(companyRepository.findCompanyByEmail(formDeleteOffer.emailCompany())
                 .orElseThrow(() -> new CompanyNotFoundException("Company not found with email " + formDeleteOffer.emailCompany())));
-        Offer offer = offerRepository.findOfferById(formDeleteOffer.idOffer()).orElseThrow(() -> new OfferNotFoundException("Offer not found with id " + formDeleteOffer.idOffer()));
+
+        Offer offer = offerRepository.findOfferById(formDeleteOffer.idOffer())
+                .orElseThrow(() -> new OfferNotFoundException("Offer not found with id " + formDeleteOffer.idOffer()));
+
         return offerRepository.deleteOffer(offer, findCompany.get());
     }
 }

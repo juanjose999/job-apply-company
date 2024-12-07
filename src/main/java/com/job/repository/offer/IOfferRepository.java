@@ -2,16 +2,16 @@ package com.job.repository.offer;
 
 import com.job.entities.company.Company;
 import com.job.entities.offer.Offer;
-import com.job.entities.offer.dto.OfferResponseDto;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface IOfferRepository {
-    List<Offer> findAllOffers();
-    List<Offer> findAllOffersInsideCompany(Company company);
+    Set<Offer> findAllOffers();
+    Set<Offer> findAllOffersInsideCompany(Company company);
     Optional<Offer> findOfferById(Long id);
-    Optional<List<Offer>> findOfferByTitle(String title);
+    Optional<Set<Offer>> findOfferByTitle(String title);
     Offer saveOffer(Offer offer, Company company);
     Offer updateOffer(Long idOffer, Offer offer, Company company);
     boolean deleteOffer(Offer offer, Company company);

@@ -8,7 +8,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,19 +22,20 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "name not empty")
+    @NotBlank(message = "Name cannot be empty, please fill out this field")
     private String full_name;
+    @Column(unique = true)
     @Email(message = "Email is invalid")
-    @NotNull(message = "Email cannot be null")
+    @NotNull(message = "Email cannot be empty, please fill out this field")
     private String email;
-    @NotBlank(message = "password not empty")
+    @NotBlank(message = "Password cannot be empty, please fill out this field")
     private String password;
-    @OneToMany
-    private List<Offer> offer;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Offer> offer;
 
     public void setOffer(Offer offer){
         if(this.offer == null || this.offer.isEmpty()){
-            this.offer = new ArrayList<>();
+            this.offer = new HashSet<>();
         }
         this.offer.add(offer);
     }

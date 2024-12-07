@@ -1,6 +1,6 @@
 package com.job.repository.apply;
 
-import com.job.entities.apply.OfferApplyUser;
+import com.job.entities.offer_apply_user.OfferApplyUser;
 import com.job.entities.offer.Offer;
 import com.job.entities.user.MyUser;
 import com.job.exception.exceptions.OfferNotFoundException;

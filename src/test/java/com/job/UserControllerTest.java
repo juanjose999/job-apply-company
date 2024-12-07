@@ -1,8 +1,9 @@
 package com.job;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.job.entities.apply.dto.FormResponseApplyOffer;
-import com.job.entities.apply.dto.FormUserApplyOffer;
+import com.job.controller.MyUserController;
+import com.job.entities.offer_apply_user.dto.FormResponseApplyOffer;
+import com.job.entities.offer_apply_user.dto.FormUserApplyOffer;
 import com.job.entities.company.Company;
 import com.job.entities.company.dto.CompanyDto;
 import com.job.entities.company.dto.CompanyMapper;
@@ -144,7 +145,7 @@ public class UserControllerTest {
                 .build();
 
         Mockito.when(userService.userApplyOffer(applyOffer)).thenReturn(new FormResponseApplyOffer(offer.getTitle(), String.valueOf(LocalDateTime.now()), "PENDING"));
-        mockMvc.perform(post("/v1/users/apply-offer")
+        mockMvc.perform(post("/v1/users/apply-to-offer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(applyOffer)))
                 .andExpect(status().isCreated())

@@ -1,6 +1,6 @@
 package com.job.repository.myuser;
 
-import com.job.entities.apply.OfferApplyUser;
+import com.job.entities.offer_apply_user.OfferApplyUser;
 import com.job.entities.offer.Offer;
 import com.job.entities.user.MyUser;
 import com.job.repository.apply.IApplyOffer;
@@ -25,6 +25,11 @@ public class MyUserRepositoryImpl implements IMyUserRepository{
     @Override
     public Optional<MyUser> findUserByEmail(String email) {
         return myUserRepositoryJpa.findByEmail(email);
+    }
+
+    @Override
+    public Optional<MyUser> findUserById(Long id) {
+        return myUserRepositoryJpa.findById(id);
     }
 
     @Override
