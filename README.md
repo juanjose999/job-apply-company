@@ -5,7 +5,8 @@ Jobify es una plataforma desarrollada en **Java Spring Boot** que permite a las 
 
 ---
 
-## Características**
+## Características
+
 ### Para Compañías
 - Crear, editar y eliminar ofertas de empleo.
 - Gestionar postulaciones recibidas por oferta.
