@@ -9,4 +9,5 @@ import java.util.Set;
 
 public interface IOfferRepositoryJpa extends JpaRepository<Offer, Long> {
     Optional<Set<Offer>> findByTitle(String title);
+    Optional<Offer> findByTitleIgnoreCase(String title);
 }

@@ -12,5 +12,5 @@ public record OfferSingleWithAllApplications(Long idOffer,
                                              String requirements,
                                              String dateCreated,
                                              @JsonManagedReference
-                                     List<OfferApplyUser> ApplyUserList) {
+                                            List<OfferApplyUser> ApplyUserList) {
 }

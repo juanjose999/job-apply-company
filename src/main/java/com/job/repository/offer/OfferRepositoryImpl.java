@@ -21,6 +21,12 @@ public class OfferRepositoryImpl implements IOfferRepository {
     }
 
     @Override
+    public Boolean findExistByTitleIgnoreCase(String title) {
+        Optional<Offer> offer = offerRepository.findByTitleIgnoreCase(title);
+        return offer.isPresent() ? Boolean.TRUE : Boolean.FALSE;
+    }
+
+    @Override
     public Set<Offer> findAllOffersInsideCompany(Company company) {
         return company.getOffer();
     }

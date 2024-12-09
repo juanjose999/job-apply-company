@@ -2,6 +2,7 @@ package com.job.controller;
 
 import com.job.entities.offer.dto.*;
 import com.job.exception.exceptions.CompanyNotFoundException;
+import com.job.exception.exceptions.OfferExistException;
 import com.job.exception.exceptions.OfferNotFoundException;
 import com.job.service.offer.IOfferService;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,7 @@ public class OfferController {
     }
 
     @PostMapping
-    public ResponseEntity<OfferResponseDto> saveOffer(@RequestBody FormSaveOffer formSaveOffer) throws CompanyNotFoundException {
+    public ResponseEntity<OfferResponseDto> saveOffer(@RequestBody FormSaveOffer formSaveOffer) throws CompanyNotFoundException, OfferExistException, OfferNotFoundException {
         return ResponseEntity.ok(offerService.saveOffer(formSaveOffer));
     }
 

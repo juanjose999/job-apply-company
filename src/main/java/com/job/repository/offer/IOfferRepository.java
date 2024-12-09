@@ -9,6 +9,7 @@ import java.util.Set;
 
 public interface IOfferRepository {
     Set<Offer> findAllOffers();
+    Boolean findExistByTitleIgnoreCase(String title);
     Set<Offer> findAllOffersInsideCompany(Company company);
     Optional<Offer> findOfferById(Long id);
     Optional<Set<Offer>> findOfferByTitle(String title);

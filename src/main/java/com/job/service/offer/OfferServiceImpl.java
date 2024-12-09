@@ -4,6 +4,7 @@ import com.job.entities.company.Company;
 import com.job.entities.offer.Offer;
 import com.job.entities.offer.dto.*;
 import com.job.exception.exceptions.CompanyNotFoundException;
+import com.job.exception.exceptions.OfferExistException;
 import com.job.exception.exceptions.OfferNotFoundException;
 import com.job.repository.company.ICompanyRepository;
 import com.job.repository.offer.IOfferRepository;
@@ -53,9 +54,14 @@ public class OfferServiceImpl implements IOfferService {
     }
 
     @Override
-    public OfferResponseDto saveOffer(FormSaveOffer formSaveOffer) throws CompanyNotFoundException {
+    public OfferResponseDto saveOffer(FormSaveOffer formSaveOffer) throws OfferExistException, CompanyNotFoundException {
         Company company = companyRepository.findCompanyByEmail(formSaveOffer.emailCompany())
                 .orElseThrow(() -> new CompanyNotFoundException("Company not found with email " + formSaveOffer.emailCompany()));
+
+        if(offerRepository.findExistByTitleIgnoreCase(formSaveOffer.title())){
+            throw new OfferExistException("The offer with the name, " + formSaveOffer.title() +
+                    " already exists, please enter a name that does not exist in your offer list.");
+        }
 
         OfferDto offerDto = OfferDto.builder()
                 .title(formSaveOffer.title())

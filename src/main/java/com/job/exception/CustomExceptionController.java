@@ -1,9 +1,6 @@
 package com.job.exception;
 
-import com.job.exception.exceptions.CompanyNotFoundException;
-import com.job.exception.exceptions.MyUserNotFoundException;
-import com.job.exception.exceptions.OfferIsDesactiveException;
-import com.job.exception.exceptions.OfferNotFoundException;
+import com.job.exception.exceptions.*;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -55,4 +52,11 @@ public class CustomExceptionController {
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(OfferExistException.class)
+    public ResponseEntity<ErrorResponse> handleOfferExistException(OfferExistException e) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
 }
+

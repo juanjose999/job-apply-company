@@ -11,6 +11,7 @@ import com.job.entities.offer_apply_user.dto.OfferApplyUserMapper;
 import com.job.entities.offer_apply_user.dto.OfferSingleWithAllApplications;
 import com.job.entities.offer_apply_user.dto.OffersWithApplicationsResponseDto;
 import com.job.exception.exceptions.CompanyNotFoundException;
+import com.job.repository.apply.ApplyOfferImpl;
 import com.job.repository.apply.IApplyOfferJpa;
 import com.job.repository.company.ICompanyRepository;
 import com.job.repository.offer.IOfferRepository;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -31,22 +33,33 @@ public class CompanyServiceImpl implements ICompanyService{
 
     @Override
     public List<CompanyResponseDto> findAllCompany() {
-        return companyRepository.findAllCompany().stream()
-                .map(CompanyMapper::CompanyToCompanyResponseDto)
-                .toList();
+        List<Company> companies = companyRepository.findAllCompany();
+        if(companies == null || companies.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<CompanyResponseDto> companiesDto = new ArrayList<>();
+        companies.forEach(company -> {
+            Set<Offer> offer = company.getOffer();
+            if(offer != null && !offer.isEmpty()) {
+                List<OfferSingleWithAllApplications> offerSingle = offer.stream()
+                        .map(o -> OfferApplyUserMapper.offerToOfferSingleWithAllApplications(o, applyOfferJpa.findByOfferId(o.getId()))).toList();
+                companiesDto.add(CompanyMapper.CompanyToCompanyResponseDto(company, offerSingle));
+            }else{
+                companiesDto.add(CompanyMapper.CompanyToCompanyResponseDto(company, Collections.emptyList()));
+            }
+        });
+        return companiesDto;
     }
 
     @Override
     public CompanyResponseDto saveCompany(CompanyDto companyDto) {
-        return CompanyMapper.CompanyToCompanyResponseDto(
-                companyRepository.saveCompany(CompanyMapper.CompanyDtoToCompany(companyDto)));
+        return CompanyMapper.CompanyToCompanyResponseDto(companyRepository.saveCompany(CompanyMapper.CompanyDtoToCompany(companyDto)));
     }
 
     @Override
     public CompanyResponseDto findCompanyByEmail(String email) throws CompanyNotFoundException {
-        return CompanyMapper.CompanyToCompanyResponseDtoList(
-                companyRepository.findCompanyByEmail(email)
-                        .orElseThrow(() -> new CompanyNotFoundException("Company not found with email " + email)));
+        return CompanyMapper.CompanyToCompanyResponseDto(companyRepository.findCompanyByEmail(email)
+                .orElseThrow(() -> new CompanyNotFoundException("Company not found with email " + email)));
     }
 
     @Override
