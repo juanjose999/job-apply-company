@@ -24,8 +24,19 @@ public class OfferApplyUserMapper {
                 .description(o.getDescription())
                 .requirements(o.getRequirements())
                 .dateCreated(o.getDate_created())
-                .ApplyUserList(offerApplyUserList)
+                .counterOfApplicants(o.getUserOffers().size())
+                .appliedUsers(offerApplyUserList.stream()
+                        .map(OfferApplyUserMapper::applyUserToFormInfoUser).toList())
                 .build();
     }
 
+    public static FormInfoUser applyUserToFormInfoUser(OfferApplyUser offerApplyUser) {
+        return FormInfoUser.builder()
+                .idApply(offerApplyUser.getId())
+                .nameUser(offerApplyUser.getUser().getFirst_name())
+                .email(offerApplyUser.getUser().getEmail())
+                .applicationStatus(String.valueOf(offerApplyUser.getStatus()).replaceAll("_"," ").toLowerCase())
+                .dateApplication(offerApplyUser.getDate_apply())
+                .build();
+    }
 }

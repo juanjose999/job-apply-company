@@ -24,7 +24,7 @@ public class MyUserController {
 
     private final IMyUserService myUserService;
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<MyUserResponseDto>> findAll() {
         return ResponseEntity.ok(myUserService.allUser());
     }

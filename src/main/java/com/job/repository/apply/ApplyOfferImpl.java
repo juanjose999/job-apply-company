@@ -34,6 +34,11 @@ public class ApplyOfferImpl implements IApplyOffer{
         return Optional.of(applyOfferJpa.findById(id)).orElseThrow(() -> new OfferNotFoundException("Offer not found"));
     }
 
+    @Override
+    public OfferApplyUser saveApply(OfferApplyUser apply) {
+        return applyOfferJpa.save(apply);
+    }
+
     private String setDateApply(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return LocalDateTime.now().format(formatter);

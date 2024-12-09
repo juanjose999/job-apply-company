@@ -1,6 +1,7 @@
 package com.job.controller;
 
 import com.job.entities.offer.dto.*;
+import com.job.entities.offer_apply_user.dto.FormFindApply;
 import com.job.exception.exceptions.CompanyNotFoundException;
 import com.job.exception.exceptions.OfferExistException;
 import com.job.exception.exceptions.OfferNotFoundException;
@@ -41,6 +42,11 @@ public class OfferController {
     @PostMapping
     public ResponseEntity<OfferResponseDto> saveOffer(@RequestBody FormSaveOffer formSaveOffer) throws CompanyNotFoundException, OfferExistException, OfferNotFoundException {
         return ResponseEntity.ok(offerService.saveOffer(formSaveOffer));
+    }
+
+    @GetMapping("/applications")
+    public ResponseEntity<?> findApplyByCompanyEmailAndIdOffer(@RequestBody FormFindApply formFindApply) throws CompanyNotFoundException, OfferNotFoundException {
+        return ResponseEntity.ok(offerService.findApplyByEmailCompanyAndIdOffer(formFindApply));
     }
 
     @PutMapping()

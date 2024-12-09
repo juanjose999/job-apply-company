@@ -5,5 +5,5 @@ import lombok.Builder;
 import java.util.List;
 @Builder
 public record OffersWithApplicationsResponseDto(String nameCompany,
-                                                List<OfferSingleWithAllApplications> offerSingleWithAllApplications) {
+                                                List<OfferSingleWithAllApplications> offersWithAllApplications) {
 }
