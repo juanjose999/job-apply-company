@@ -22,6 +22,7 @@ public class MyUserMapper {
                 .name(user.getFirst_name() + " " + user.getLast_name())
                 .name(user.getFirst_name() + " " + user.getLast_name())
                 .email(user.getEmail())
+                .linkImgProfile(user.getUrlImgProfile())
                 .counterAllApplications(user.getUserOffer() == null ? 0 : user.getUserOffer().size())
                 .counterApplicationsToInterview(user.getUserOffer() == null ? 0 :
                         user.getUserOffer().stream()

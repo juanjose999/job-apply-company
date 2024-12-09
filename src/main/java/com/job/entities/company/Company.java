@@ -1,5 +1,6 @@
 package com.job.entities.company;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.job.entities.offer.Offer;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -24,11 +25,13 @@ public class Company {
     private Long id;
     @NotBlank(message = "Name cannot be empty, please fill out this field")
     private String full_name;
+    private String linkImgProfile;
     @Column(unique = true)
     @Email(message = "Email is invalid")
     @NotNull(message = "Email cannot be empty, please fill out this field")
     private String email;
     @NotBlank(message = "Password cannot be empty, please fill out this field")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Offer> offer;

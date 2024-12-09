@@ -36,6 +36,8 @@ public class MyUser {
     @NotBlank(message = "Password cannot be empty, please fill out this field")
     private String password;
 
+    private String urlImgProfile;
+
     @JsonBackReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<OfferApplyUser> userOffer = new HashSet<>();

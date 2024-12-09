@@ -11,9 +11,14 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/jobs
-    username: postgres
-    password: postgres
+    url: ${DB_LINK}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
 app:
   version: v1
+
+cloudinary:
+  cloud-name: ${CLOUD_NAME}
+  api-key: ${API_KEY}
+  api-secret: ${API_SECRET_KEY}
