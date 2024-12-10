@@ -22,6 +22,7 @@ public interface IMyUserService {
     Either<String, String> uploadImgProfile(MultipartFile file, String emailUser);
     MyUserResponseDto saveUser(MyUserDto userDto);
     FormResponseApplyOffer userApplyOffer(FormUserApplyOffer formUserApplyOffer) throws MyUserNotFoundException, OfferNotFoundException, OfferIsDesactiveException;
-    MyUserResponseDto updateUser(FormUpdateUser formUpdateUser) throws MyUserNotFoundException;
+    MyUserResponseDto updateUserByEmail(FormUpdateUser formUpdateUser) throws MyUserNotFoundException;
+    String updateBiographyUserByEmail(String bio, String email) throws MyUserNotFoundException;
     boolean deleteUser(String email) throws MyUserNotFoundException;
 }

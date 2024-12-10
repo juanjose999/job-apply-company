@@ -4,6 +4,7 @@ import com.job.entities.company.Company;
 import com.job.entities.company.dto.CompanyDto;
 import com.job.entities.company.dto.CompanyResponseDto;
 import com.job.entities.company.dto.FormUpdateCompany;
+import com.job.entities.company.dto.UpdateStateOfferInsideCompany;
 import com.job.entities.offer.dto.OfferResponseDto;
 import com.job.entities.offer_apply_user.dto.OffersWithApplicationsResponseDto;
 import com.job.exception.exceptions.CompanyNotFoundException;
@@ -72,6 +73,24 @@ public class CompanyController {
     @PutMapping
     public ResponseEntity<CompanyResponseDto> updateCompany(@RequestBody FormUpdateCompany formUpdateCompany) throws CompanyNotFoundException {
         return ResponseEntity.ok(companyService.updateCompanyByEmail(formUpdateCompany));
+    }
+
+    @PatchMapping
+    public ResponseEntity<?> updateStateOfferToRejectByEmailCompany(@RequestBody UpdateStateOfferInsideCompany updateStateOfferInsideCompany) throws CompanyNotFoundException, OfferNotFoundException {
+        Either<String, String> resultUpdateState = companyService.updateStateOfferToRejectByEmailCompany(updateStateOfferInsideCompany);
+        if(resultUpdateState.isLeft()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body("correct update of the offer status");
+    }
+
+    @PatchMapping
+    public ResponseEntity<?> updateStateOfferToInterviewedByEmailCompany(@RequestBody UpdateStateOfferInsideCompany updateStateOfferInsideCompany) throws CompanyNotFoundException, OfferNotFoundException {
+        Either<String, String> resultUpdateState = companyService.updateStateOfferToRejectByEmailCompany(updateStateOfferInsideCompany);
+        if(resultUpdateState.isLeft()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body("correct update of the offer status");
     }
 
     @DeleteMapping

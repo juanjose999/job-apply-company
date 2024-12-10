@@ -32,8 +32,13 @@ public class MyUserController {
     private final IMyUserService myUserService;
 
     @GetMapping
-    public ResponseEntity<List<MyUserResponseDto>> findAll() {
+    public ResponseEntity<List<MyUserResponseDto>> findAllUsers() {
         return ResponseEntity.ok(myUserService.allUser());
+    }
+
+    @GetMapping("/applications")
+    public ResponseEntity<List<FormResponseApplyOffer>> findAllApplications(@RequestParam String email) throws MyUserNotFoundException {
+        return ResponseEntity.ok(myUserService.findApplicationByEmail(email));
     }
 
     @GetMapping("/email/{email}")
@@ -61,15 +66,15 @@ public class MyUserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userUploadImgProfile.get());
     }
 
-
-    @GetMapping("/applications")
-    public ResponseEntity<List<FormResponseApplyOffer>> findAllApplications(@RequestParam String email) throws MyUserNotFoundException {
-        return ResponseEntity.ok(myUserService.findApplicationByEmail(email));
+    @PatchMapping("/update-bio")
+    public ResponseEntity<?> updateUserBio(@RequestParam String emailUser, @RequestParam String bio) throws MyUserNotFoundException {
+        return ResponseEntity.ok(myUserService.updateBiographyUserByEmail(emailUser, bio));
     }
 
+
     @PutMapping
-    public ResponseEntity<MyUserResponseDto> updateUser(@RequestBody FormUpdateUser formUpdateUser) throws MyUserNotFoundException {
-        return ResponseEntity.ok(myUserService.updateUser(formUpdateUser));
+    public ResponseEntity<MyUserResponseDto> updateUserByEmail(@RequestBody FormUpdateUser formUpdateUser) throws MyUserNotFoundException {
+        return ResponseEntity.ok(myUserService.updateUserByEmail(formUpdateUser));
     }
 
     @DeleteMapping

@@ -38,6 +38,8 @@ public class MyUser {
 
     private String urlImgProfile;
 
+    private String biography;
+
     @JsonBackReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<OfferApplyUser> userOffer = new HashSet<>();

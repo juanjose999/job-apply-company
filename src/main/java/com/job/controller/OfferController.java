@@ -30,7 +30,7 @@ public class OfferController {
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<List<OfferResponseDto>> getOfferByEmailCompany(@PathVariable String email) throws OfferNotFoundException, CompanyNotFoundException {
+    public ResponseEntity<List<OfferResponseDto>> getOffersByEmailCompany(@PathVariable String email) throws OfferNotFoundException, CompanyNotFoundException {
         return ResponseEntity.ok(offerService.findAllOffersInsideCompany(email));
     }
 

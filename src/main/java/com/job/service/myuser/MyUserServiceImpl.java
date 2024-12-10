@@ -106,7 +106,7 @@ public class MyUserServiceImpl implements IMyUserService {
     }
 
     @Override
-    public MyUserResponseDto updateUser(FormUpdateUser formUpdateUser) throws MyUserNotFoundException {
+    public MyUserResponseDto updateUserByEmail(FormUpdateUser formUpdateUser) throws MyUserNotFoundException {
         MyUserDto userDto = MyUserDto.builder()
                 .first_name(formUpdateUser.first_name())
                 .last_name(formUpdateUser.last_name())
@@ -117,6 +117,16 @@ public class MyUserServiceImpl implements IMyUserService {
                 myUserRepository.updateUser(formUpdateUser.emailFindUser(), MyUserMapper.UserDtoToUser(userDto))
                         .orElseThrow(()->new MyUserNotFoundException("User not found with email: " + formUpdateUser.email() ))
         );
+    }
+
+    @Override
+    public String updateBiographyUserByEmail(String bio, String email) throws MyUserNotFoundException {
+        if(bio == null || bio.isEmpty()) throw new MyUserNotFoundException("User not found with email : " + email);
+        MyUser findUser = myUserRepository.findUserByEmail(email)
+                .orElseThrow(() -> new MyUserNotFoundException("User not found with email : " + email ));
+        findUser.setBiography(bio);
+        myUserRepository.saveUser(findUser);
+        return "Biography update is successfully";
     }
 
     @Override
