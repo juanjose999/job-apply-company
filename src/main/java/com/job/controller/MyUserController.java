@@ -13,6 +13,7 @@ import com.job.exception.exceptions.OfferNotFoundException;
 import com.job.repository.myuser.IMyUserRepository;
 import com.job.service.cloudinary.CloudinaryService;
 import com.job.service.myuser.IMyUserService;
+import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +30,6 @@ import java.util.Optional;
 public class MyUserController {
 
     private final IMyUserService myUserService;
-    private final CloudinaryService cloudinaryService;
-    private final IMyUserRepository myUserRepository;
 
     @GetMapping
     public ResponseEntity<List<MyUserResponseDto>> findAll() {
@@ -55,20 +54,11 @@ public class MyUserController {
 
     @PostMapping("/upload/img/profile")
     public ResponseEntity<?> uploadImgProfile(@RequestParam("file") MultipartFile file, @RequestParam String emailUser) throws MyUserNotFoundException, IOException {
-        Optional<MyUser> user = myUserRepository.findUserByEmail(emailUser);
-        if(user.isPresent()) {
-            try{
-                MyUser myUser = user.get();
-                String imgUrl = cloudinaryService.uploadImg(file.getBytes());
-                myUser.setUrlImgProfile(imgUrl);
-                myUserRepository.saveUser(myUser);
-                return ResponseEntity.ok().body(imgUrl);
-            }catch (Exception e){
-                return ResponseEntity.status(500).body("Error in uploading img profile user");
-            }
-        }else{
-            return ResponseEntity.status(404).body("User not found");
+        Either<String, String> userUploadImgProfile = myUserService.uploadImgProfile(file, emailUser);
+        if(userUploadImgProfile.isLeft()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to upload profile");
         }
+        return ResponseEntity.status(HttpStatus.CREATED).body(userUploadImgProfile.get());
     }
 
 

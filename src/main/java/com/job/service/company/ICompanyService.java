@@ -6,12 +6,14 @@ import com.job.entities.company.dto.FormUpdateCompany;
 import com.job.entities.offer_apply_user.dto.OffersWithApplicationsResponseDto;
 import com.job.exception.exceptions.CompanyNotFoundException;
 import io.vavr.control.Either;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface ICompanyService {
     List<CompanyResponseDto> findAllCompany();
     CompanyResponseDto saveCompany(CompanyDto companyDto);
+    Either<String, String> uploadImgProfileCompany(MultipartFile file, String emailCompany) throws CompanyNotFoundException;
     CompanyResponseDto findCompanyByEmail(String email) throws CompanyNotFoundException;
     OffersWithApplicationsResponseDto findOffersWithApplicationsByEmailCompany(String emailCompany) throws CompanyNotFoundException;
     CompanyResponseDto updateCompanyByEmail(FormUpdateCompany formUpdateCompany) throws CompanyNotFoundException;

@@ -15,13 +15,14 @@ import com.job.repository.apply.ApplyOfferImpl;
 import com.job.repository.apply.IApplyOfferJpa;
 import com.job.repository.company.ICompanyRepository;
 import com.job.repository.offer.IOfferRepository;
+import com.job.service.cloudinary.ICloudinaryService;
+import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.io.IOException;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +31,7 @@ public class CompanyServiceImpl implements ICompanyService{
     private final ICompanyRepository companyRepository;
     private final IOfferRepository offerRepository;
     private final IApplyOfferJpa applyOfferJpa;
+    private final ICloudinaryService cloudinaryService;
 
     @Override
     public List<CompanyResponseDto> findAllCompany() {
@@ -54,6 +56,23 @@ public class CompanyServiceImpl implements ICompanyService{
     @Override
     public CompanyResponseDto saveCompany(CompanyDto companyDto) {
         return CompanyMapper.CompanyToCompanyResponseDto(companyRepository.saveCompany(CompanyMapper.CompanyDtoToCompany(companyDto)));
+    }
+
+    @Override
+    public Either<String, String> uploadImgProfileCompany(MultipartFile file, String emailCompany) throws CompanyNotFoundException {
+        Optional<Company> company = companyRepository.findCompanyByEmail(emailCompany);
+        if(company.isEmpty()){
+            return Either.left("Company not found");
+        }
+        try{
+            String fileUpload = cloudinaryService.uploadImg(file.getBytes());
+            company.get().setLinkImgProfile(fileUpload);
+            companyRepository.saveCompany(company.get());
+            return Either.right("url image profile = " + fileUpload);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override

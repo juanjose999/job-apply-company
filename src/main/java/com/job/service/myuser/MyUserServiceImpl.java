@@ -16,10 +16,15 @@ import com.job.exception.exceptions.OfferNotFoundException;
 import com.job.repository.apply.IApplyOfferJpa;
 import com.job.repository.myuser.IMyUserRepository;
 import com.job.repository.offer.IOfferRepository;
+import com.job.service.cloudinary.ICloudinaryService;
+import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +33,7 @@ public class MyUserServiceImpl implements IMyUserService {
     private final IMyUserRepository myUserRepository;
     private final IOfferRepository offerRepository;
     private final IApplyOfferJpa applyOfferJpa;
+    private final ICloudinaryService cloudinaryService;
 
     @Override
     public List<MyUserResponseDto> allUser() {
@@ -51,6 +57,24 @@ public class MyUserServiceImpl implements IMyUserService {
                 .stream()
                 .map(OfferApplyUserMapper::offerApplyToResponse)
                 .toList();
+    }
+
+    @Override
+    public Either<String, String> uploadImgProfile(MultipartFile file, String emailUser) {
+        if(file==null || file.isEmpty()) return Either.left("File is empty, please load file");
+        if(emailUser == null || emailUser.isEmpty()) return Either.left("Email user is empty");
+        Optional<MyUser> myUser = myUserRepository.findUserByEmail(emailUser);
+        if(myUser.isEmpty()){
+            return Either.left("User not found with email : " + emailUser);
+        }
+        try {
+            String urlImg = cloudinaryService.uploadImg(file.getBytes());
+            myUser.get().setUrlImgProfile(urlImg);
+            myUserRepository.saveUser(myUser.get());
+            return Either.right("url image profile = " + urlImg);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.job.repository.company.ICompanyRepository;
 import com.job.service.cloudinary.CloudinaryService;
 import com.job.service.company.ICompanyService;
 import com.job.service.offer.IOfferService;
+import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,6 @@ public class CompanyController {
 
     private final ICompanyService companyService;
     private final IOfferService offerService;
-    private final ICompanyRepository companyRepository;
     private final CloudinaryService cloudinaryService;
 
     @GetMapping
@@ -61,17 +61,12 @@ public class CompanyController {
     }
 
     @PostMapping("/upload/img/profile")
-    public ResponseEntity<?> uploadImgProfileCompany(@RequestParam("file")MultipartFile file, @RequestParam String emailCompany) throws IOException {
-        Optional<Company> findCompany = companyRepository.findCompanyByEmail(emailCompany);
-        if(findCompany.isPresent()){
-            Company company = findCompany.get();
-            String url = cloudinaryService.uploadImg(file.getBytes());
-            company.setLinkImgProfile(url);
-            companyRepository.saveCompany(company);
-            return ResponseEntity.ok(company);
-        }else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Company not found");
+    public ResponseEntity<?> uploadImgProfileCompany(@RequestParam("file")MultipartFile file, @RequestParam String emailCompany) throws IOException, CompanyNotFoundException {
+        Either<String, String> saveImgProfile = companyService.uploadImgProfileCompany(file, emailCompany);
+        if(saveImgProfile.isLeft()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+        return ResponseEntity.status(HttpStatus.CREATED).body(saveImgProfile.get());
     }
 
     @PutMapping
