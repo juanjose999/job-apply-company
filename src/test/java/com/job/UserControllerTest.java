@@ -1,22 +1,22 @@
 package com.job;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.job.user.controller.MyUserController;
-import com.job.offer_user.dto.FormResponseApplyOffer;
-import com.job.offer_user.dto.FormUserApplyOffer;
-import com.job.company.entity.Company;
-import com.job.company.dto.CompanyDto;
-import com.job.company.dto.CompanyMapper;
-import com.job.offer.entity.Offer;
-import com.job.offer.dto.OfferDto;
-import com.job.offer.dto.OfferMapper;
-import com.job.user.entity.MyUser;
-import com.job.user.dto.FormUpdateUser;
-import com.job.user.dto.MyUserDto;
-import com.job.user.dto.MyUserMapper;
-import com.job.user.dto.MyUserResponseDto;
-import com.job.shared.exception.exceptions.MyUserNotFoundException;
-import com.job.user.service.MyUserServiceImpl;
+import com.jobify.user.controller.MyUserController;
+import com.jobify.offer_user.dto.FormResponseApplyOffer;
+import com.jobify.offer_user.dto.FormUserApplyOffer;
+import com.jobify.company.entity.Company;
+import com.jobify.company.dto.CompanyDto;
+import com.jobify.company.dto.CompanyMapper;
+import com.jobify.offer.entity.Offer;
+import com.jobify.offer.dto.OfferDto;
+import com.jobify.offer.dto.OfferMapper;
+import com.jobify.user.entity.MyUser;
+import com.jobify.user.dto.FormUpdateUser;
+import com.jobify.user.dto.MyUserDto;
+import com.jobify.user.dto.MyUserMapper;
+import com.jobify.user.dto.MyUserResponseDto;
+import com.jobify.shared.exception.exceptions.MyUserNotFoundException;
+import com.jobify.user.service.MyUserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,9 +58,11 @@ public class UserControllerTest {
         userDto = objectMapper.readValue(readSingleUser, MyUserDto.class);
         user = MyUserMapper.UserDtoToUser(userDto);
         userResponseDto = MyUserResponseDto.builder()
-                .first_name(userDto.first_name())
-                .last_name(userDto.last_name())
+                .name(userDto.first_name() + userDto.last_name())
                 .email(userDto.email())
+                .counterAllApplications(0)
+                .counterApplicationsRejected(0)
+                .counterApplicationsToInterview(0)
                 .build();
     }
 
@@ -103,12 +105,11 @@ public class UserControllerTest {
                 .build();
 
         MyUserResponseDto userResponseDto = MyUserResponseDto.builder()
-                .first_name(formUpdateUser.first_name())
-                .last_name(formUpdateUser.last_name())
+                .name(formUpdateUser.first_name() + formUpdateUser.last_name())
                 .email(formUpdateUser.email())
                 .build();
 
-        Mockito.when(userService.updateUser(formUpdateUser)).thenReturn(userResponseDto);
+        Mockito.when(userService.updateUserByEmail(formUpdateUser)).thenReturn(userResponseDto);
         mockMvc.perform(put("/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(formUpdateUser)))
@@ -117,7 +118,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.last_name").value("spring"))
                 .andExpect(jsonPath("$.email").value("benek@gmail.com"));
 
-        Mockito.verify(userService).updateUser(formUpdateUser);
+        Mockito.verify(userService).updateUserByEmail(formUpdateUser);
     }
 
     @Test

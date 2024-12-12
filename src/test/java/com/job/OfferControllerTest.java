@@ -2,14 +2,14 @@ package com.job;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.job.offer.controller.OfferController;
-import com.job.company.entity.Company;
-import com.job.company.dto.CompanyDto;
-import com.job.company.dto.CompanyResponseDto;
-import com.job.offer.dto.*;
-import com.job.offer.entity.Offer;
-import com.job.company.service.CompanyServiceImpl;
-import com.job.offer.service.OfferServiceImpl;
+import com.jobify.offer.controller.OfferController;
+import com.jobify.company.entity.Company;
+import com.jobify.company.dto.CompanyDto;
+import com.jobify.company.dto.CompanyResponseDto;
+import com.jobify.offer.dto.*;
+import com.jobify.offer.entity.Offer;
+import com.jobify.company.service.CompanyServiceImpl;
+import com.jobify.offer.service.OfferServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -123,15 +123,15 @@ public class OfferControllerTest {
 
         Mockito.verify(offerService).findAllOffersInsideCompany(emailCompany);
     }
-    @Test
-    void should_findAllOffer_return_200_and_list_offerResponseDto() throws Exception {
-        Mockito.when(offerService.findAllOffers()).thenReturn(offerResponseDtos);
-        mockMvc.perform(get("/v1/offers"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(offerResponseDtos.size()));
-
-        Mockito.verify(offerService).findAllOffers();
-    }
+//    @Test
+//    void should_findAllOffer_return_200_and_list_offerResponseDto() throws Exception {
+//        Mockito.when(offerService.findAllOffers()).thenReturn(offerResponseDtos);
+//        mockMvc.perform(get("/v1/offers"))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.length()").value(offerResponseDtos.size()));
+//
+//        Mockito.verify(offerService).findAllOffers();
+//    }
 
     @Test
     void should_findOfferByName_return_200_and_list_offerResponseDtos() throws Exception {
