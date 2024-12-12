@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.jobify.CompaniesControllerTest
+-------------------------------------------------------------------------------
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.411 s -- in com.jobify.CompaniesControllerTest
