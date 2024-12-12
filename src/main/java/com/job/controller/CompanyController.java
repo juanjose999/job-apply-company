@@ -75,7 +75,7 @@ public class CompanyController {
         return ResponseEntity.ok(companyService.updateCompanyByEmail(formUpdateCompany));
     }
 
-    @PatchMapping
+    @PatchMapping("/state-to-reject")
     public ResponseEntity<?> updateStateOfferToRejectByEmailCompany(@RequestBody UpdateStateOfferInsideCompany updateStateOfferInsideCompany) throws CompanyNotFoundException, OfferNotFoundException {
         Either<String, String> resultUpdateState = companyService.updateStateOfferToRejectByEmailCompany(updateStateOfferInsideCompany);
         if(resultUpdateState.isLeft()){
@@ -84,7 +84,7 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.CREATED).body("correct update of the offer status");
     }
 
-    @PatchMapping
+    @PatchMapping("/state-to-interviewed")
     public ResponseEntity<?> updateStateOfferToInterviewedByEmailCompany(@RequestBody UpdateStateOfferInsideCompany updateStateOfferInsideCompany) throws CompanyNotFoundException, OfferNotFoundException {
         Either<String, String> resultUpdateState = companyService.updateStateOfferToRejectByEmailCompany(updateStateOfferInsideCompany);
         if(resultUpdateState.isLeft()){

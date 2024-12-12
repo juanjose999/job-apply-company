@@ -9,11 +9,13 @@ import com.job.entities.offer_apply_user.dto.FormInfoUser;
 import com.job.exception.exceptions.CompanyNotFoundException;
 import com.job.exception.exceptions.OfferExistException;
 import com.job.exception.exceptions.OfferNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface IOfferService {
-    List<OfferResponseDto> findAllOffers();
+    Page<OfferResponseDto> findAllOffers(int page, int size);
     OfferResponseDto findOfferById(Long id) throws OfferNotFoundException;
     FormInfoUser findApplyByEmailCompanyAndIdOffer(FormFindApply formFindApply) throws CompanyNotFoundException, OfferNotFoundException;
     List<OfferResponseDto> findAllOffersInsideCompany(String emailCompany) throws CompanyNotFoundException;

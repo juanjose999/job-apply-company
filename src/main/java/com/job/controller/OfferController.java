@@ -7,6 +7,7 @@ import com.job.exception.exceptions.OfferExistException;
 import com.job.exception.exceptions.OfferNotFoundException;
 import com.job.service.offer.IOfferService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +21,11 @@ public class OfferController {
     private final IOfferService offerService;
 
     @GetMapping
-    public ResponseEntity<List<OfferResponseDto>> getAllOffers() {
-        return ResponseEntity.ok(offerService.findAllOffers());
+    public ResponseEntity<Page<OfferResponseDto>> getAllOffers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size
+    ) {
+        return ResponseEntity.ok(offerService.findAllOffers(page,size));
     }
 
     @GetMapping("/id/{id}")

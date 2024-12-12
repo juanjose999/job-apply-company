@@ -13,7 +13,11 @@ import com.job.exception.exceptions.OfferNotFoundException;
 import com.job.repository.apply.IApplyOffer;
 import com.job.repository.company.ICompanyRepository;
 import com.job.repository.offer.IOfferRepository;
+import com.job.repository.offer.OfferRepositoryImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -31,10 +35,10 @@ public class OfferServiceImpl implements IOfferService {
     private final IApplyOffer applyOffer;
 
     @Override
-    public List<OfferResponseDto> findAllOffers() {
-        return offerRepository.findAllOffers().stream()
-                .map(OfferMapper::offerToOfferResponseDto)
-                .toList();
+    public Page<OfferResponseDto> findAllOffers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return offerRepository.findAllOffers(pageable)
+                .map(OfferMapper::offerToOfferResponseDto);
     }
 
     @Override

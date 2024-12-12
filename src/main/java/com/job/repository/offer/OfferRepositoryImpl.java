@@ -4,6 +4,8 @@ import com.job.entities.company.Company;
 import com.job.entities.offer.Offer;
 import com.job.repository.company.ICompanyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -16,8 +18,8 @@ public class OfferRepositoryImpl implements IOfferRepository {
     private final ICompanyRepository companyRepository;
 
     @Override
-    public Set<Offer> findAllOffers() {
-        return (Set<Offer>) offerRepository.findAll();
+    public Page<Offer> findAllOffers(Pageable pageable) {
+        return offerRepository.findAll(pageable);
     }
 
     @Override
