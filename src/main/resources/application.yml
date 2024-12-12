@@ -10,10 +10,9 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   datasource:
-    driver-class-name: org.postgresql.Driver
     url: ${DB_LINK}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
 
 app:
   version: v1
