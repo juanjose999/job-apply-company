@@ -1,4 +1,4 @@
-package com.job;
+package com.jobify;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

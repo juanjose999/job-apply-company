@@ -1,6 +1,7 @@
-package com.job;
+package com.jobify;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jobify.shared.cloudinary.service.CloudinaryService;
 import com.jobify.user.controller.MyUserController;
 import com.jobify.offer_user.dto.FormResponseApplyOffer;
 import com.jobify.offer_user.dto.FormUserApplyOffer;
@@ -46,6 +47,9 @@ public class UserControllerTest {
     @MockBean
     private MyUserServiceImpl userService;
 
+    @MockBean
+    private CloudinaryService cloudinaryService;
+
     private ObjectMapper objectMapper;
     private MyUserDto userDto;
     private MyUser user;
@@ -74,8 +78,7 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.first_name").value(userDto.first_name()))
-                .andExpect(jsonPath("$.last_name").value(userDto.last_name()))
+                .andExpect(jsonPath("$.name").value(userDto.first_name()+userDto.last_name()))
                 .andExpect(jsonPath("$.email").value(userDto.email()));
 
         Mockito.verify(userService).saveUser(userDto);
@@ -87,8 +90,7 @@ public class UserControllerTest {
 
         mockMvc.perform(get("/v1/users/email/{email}", userDto.email()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.first_name").value(userDto.first_name()))
-                .andExpect(jsonPath("$.last_name").value(userDto.last_name()))
+                .andExpect(jsonPath("$.name").value(userDto.first_name() + userDto.last_name()))
                 .andExpect(jsonPath("$.email").value(userDto.email()));
 
         Mockito.verify(userService).findUserByEmail(userDto.email());
@@ -114,8 +116,7 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(formUpdateUser)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.first_name").value("benek"))
-                .andExpect(jsonPath("$.last_name").value("spring"))
+                .andExpect(jsonPath("$.name").value("benekspring"))
                 .andExpect(jsonPath("$.email").value("benek@gmail.com"));
 
         Mockito.verify(userService).updateUserByEmail(formUpdateUser);

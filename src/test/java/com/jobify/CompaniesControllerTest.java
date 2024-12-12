@@ -1,4 +1,4 @@
-package com.job;
+package com.jobify;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,6 +7,7 @@ import com.jobify.company.dto.CompanyDto;
 import com.jobify.company.dto.CompanyMapper;
 import com.jobify.company.dto.CompanyResponseDto;
 import com.jobify.company.dto.FormUpdateCompany;
+import com.jobify.shared.cloudinary.service.CloudinaryService;
 import com.jobify.shared.exception.exceptions.CompanyNotFoundException;
 import com.jobify.company.service.CompanyServiceImpl;
 import com.jobify.offer.service.OfferServiceImpl;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -21,10 +23,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(CompanyController.class)
@@ -39,6 +43,9 @@ public class CompaniesControllerTest {
     @MockBean
     private OfferServiceImpl offerService;
 
+    @MockBean
+    private CloudinaryService cloudinaryService;
+
     private ObjectMapper objectMapper;
     private CompanyDto companyDto;
     private CompanyResponseDto companyResponseDto;
@@ -52,7 +59,7 @@ public class CompaniesControllerTest {
         File readerAloneCompany = new File("src/test/java/resource/CompanyDtoFakeData.json");
         companyDto = objectMapper.readValue(readerAloneCompany, CompanyDto.class);
         companyResponseDto = CompanyResponseDto.builder()
-                .fullName(companyDto.full_name()).email(companyDto.email()).build();
+                .fullName(companyDto.full_name()).email(companyDto.email()).offerList(Collections.emptyList()).build();
 
         File readerCompaniesList = new File("src/test/java/resource/CompaniesListDtoFake.json");
         companyDtoList= objectMapper.readValue(readerCompaniesList, new TypeReference<List<CompanyDto>>() {});
