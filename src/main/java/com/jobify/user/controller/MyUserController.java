@@ -1,5 +1,6 @@
 package com.jobify.user.controller;
 
+import com.jobify.company.controller.FormLogin;
 import com.jobify.offer_user.dto.FormResponseApplyOffer;
 import com.jobify.offer_user.dto.FormUserApplyOffer;
 import com.jobify.user.dto.FormUpdateUser;
@@ -13,6 +14,10 @@ import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +31,7 @@ import java.util.List;
 public class MyUserController {
 
     private final IMyUserService myUserService;
+    private final AuthenticationManager authenticationManager;
 
     @GetMapping
     public ResponseEntity<List<MyUserResponseDto>> findAllUsers() {
@@ -42,9 +48,20 @@ public class MyUserController {
         return ResponseEntity.ok(myUserService.findUserByEmail(email));
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<MyUserResponseDto> saveUser(@RequestBody MyUserDto myUserDto){
         return ResponseEntity.status(HttpStatus.CREATED).body(myUserService.saveUser(myUserDto));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody FormLogin formLogin) throws MyUserNotFoundException {
+        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(formLogin.username(), formLogin.password()));
+        if(auth.isAuthenticated()){
+            UserDetails userDetails = (UserDetails) auth.getPrincipal();
+            System.out.println("el usuario con el nombre " + userDetails.getUsername() + " es " + userDetails.getAuthorities());
+            return ResponseEntity.ok(userDetails);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @PostMapping("/apply-to-offer")

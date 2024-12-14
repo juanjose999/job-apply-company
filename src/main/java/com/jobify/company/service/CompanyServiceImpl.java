@@ -16,6 +16,10 @@ import com.jobify.offer.repository.IOfferRepository;
 import com.jobify.shared.cloudinary.service.ICloudinaryService;
 import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,7 +28,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class CompanyServiceImpl implements ICompanyService{
+public class CompanyServiceImpl implements ICompanyService, UserDetailsService {
 
     private final ICompanyRepository companyRepository;
     private final IOfferRepository offerRepository;
@@ -147,4 +151,16 @@ public class CompanyServiceImpl implements ICompanyService{
         return companyRepository.deleteCompanyByEmail(email);
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<Company> company = companyRepository.findCompanyByEmail(username);
+        if(company.isEmpty()){
+            throw new UsernameNotFoundException("Company not found with email " + username);
+        }
+        return User.builder()
+                .username(company.get().getFull_name())
+                .password(company.get().getPassword())
+                .roles("USER")
+                .build();
+    }
 }

@@ -18,6 +18,11 @@ import com.jobify.offer.repository.IOfferRepository;
 import com.jobify.shared.cloudinary.service.ICloudinaryService;
 import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,7 +32,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class MyUserServiceImpl implements IMyUserService {
+public class MyUserServiceImpl implements IMyUserService, UserDetailsService {
 
     private final IMyUserRepository myUserRepository;
     private final IOfferRepository offerRepository;
@@ -134,5 +139,18 @@ public class MyUserServiceImpl implements IMyUserService {
             return true;
         }
         throw new MyUserNotFoundException("User not found with email : " + email);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<MyUser> myUser = myUserRepository.findUserByEmail(username);
+        if(myUser.isEmpty()){
+            throw new UsernameNotFoundException("User not found with email : " + username);
+        }
+        return User.builder()
+                .username(myUser.get().getFirst_name())
+                .password(myUser.get().getPassword())
+                .roles("USER")
+                .build();
     }
 }

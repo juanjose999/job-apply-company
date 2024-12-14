@@ -14,6 +14,10 @@ import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +34,7 @@ public class CompanyController {
     private final ICompanyService companyService;
     private final IOfferService offerService;
     private final CloudinaryService cloudinaryService;
+    private final AuthenticationManager authentication;
 
     @GetMapping
     public ResponseEntity<List<CompanyResponseDto>> findAllCompanies(){
@@ -47,13 +52,24 @@ public class CompanyController {
         return ResponseEntity.ok(companyService.findOffersWithApplicationsByEmailCompany(email.get("email")));
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<CompanyResponseDto> saveCompany(@RequestBody CompanyDto companyDto){
         CompanyResponseDto companyResponseDto = companyService.saveCompany(companyDto);
         if(companyResponseDto == null){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(companyResponseDto);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginCompany(@RequestBody FormLogin formLogin){
+        Authentication auth = authentication.authenticate(new UsernamePasswordAuthenticationToken(formLogin.username(), formLogin.password()));
+        if(auth.isAuthenticated()){
+            UserDetails userDetails = (UserDetails) auth.getPrincipal();
+            System.out.println("El usuario con el nombre + " + userDetails.getUsername()  +" ha iniciado seccion");
+            return ResponseEntity.ok(userDetails);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @PostMapping("/upload/img/profile")

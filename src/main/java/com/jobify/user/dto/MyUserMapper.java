@@ -1,6 +1,7 @@
 package com.jobify.user.dto;
 
 import com.jobify.user.entity.MyUser;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static com.jobify.offer_user.entity.StatusOffer.INTERVIEWED;
 import static com.jobify.offer_user.entity.StatusOffer.REJECTED;
