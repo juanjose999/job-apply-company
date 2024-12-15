@@ -1,9 +1,6 @@
 package com.jobify.company.service;
 
-import com.jobify.company.dto.CompanyDto;
-import com.jobify.company.dto.CompanyResponseDto;
-import com.jobify.company.dto.FormUpdateCompany;
-import com.jobify.company.dto.UpdateStateOfferInsideCompany;
+import com.jobify.company.dto.*;
 import com.jobify.offer_user.dto.OffersWithApplicationsResponseDto;
 import com.jobify.shared.exception.exceptions.CompanyNotFoundException;
 import com.jobify.shared.exception.exceptions.OfferNotFoundException;
@@ -19,6 +16,7 @@ public interface ICompanyService {
     CompanyResponseDto saveCompany(CompanyDto companyDto);
     Either<String, String> uploadImgProfileCompany(MultipartFile file, String emailCompany) throws CompanyNotFoundException;
     CompanyResponseDto findCompanyByEmail(String email) throws CompanyNotFoundException;
+    CompanyResponseHome companyHome(String email) throws CompanyNotFoundException;
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
     OffersWithApplicationsResponseDto findOffersWithApplicationsByEmailCompany(String emailCompany) throws CompanyNotFoundException;
     CompanyResponseDto updateCompanyByEmail(FormUpdateCompany formUpdateCompany) throws CompanyNotFoundException;
