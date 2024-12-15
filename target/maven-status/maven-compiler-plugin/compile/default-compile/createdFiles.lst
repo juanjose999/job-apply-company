@@ -32,6 +32,7 @@ com\jobify\offer_user\dto\FormFindApply$FormFindApplyBuilder.class
 com\jobify\user\dto\MyUserResponseDto$MyUserResponseDtoBuilder.class
 com\jobify\offer_user\dto\OffersWithApplicationsResponseDto.class
 com\jobify\user\repository\MyUserRepositoryImpl.class
+com\jobify\company\dto\FormLogin.class
 com\jobify\offer_user\repository\IApplyOfferJpa.class
 com\jobify\offer\dto\OfferDto$OfferDtoBuilder.class
 com\jobify\user\dto\FormUpdateUser.class
@@ -46,12 +47,12 @@ com\jobify\company\dto\CompanyResponseDto.class
 com\jobify\company\dto\CompanyDto.class
 com\jobify\user\service\MyUserServiceImpl.class
 com\jobify\offer_user\dto\FormInfoUser$FormInfoUserBuilder.class
+com\jobify\company\dto\CompanyResponseHome.class
 com\jobify\user\controller\MyUserController.class
 com\jobify\shared\exception\exceptions\OfferExistException.class
 com\jobify\company\entity\Company.class
 com\jobify\company\service\CompanyServiceImpl.class
 com\jobify\user\dto\MyUserResponseDto.class
-com\jobify\company\controller\FormLogin.class
 com\jobify\offer_user\entity\StatusOffer.class
 com\jobify\offer_user\dto\FormUserApplyOffer$FormUserApplyOfferBuilder.class
 com\jobify\offer\dto\FormSaveOffer.class
@@ -82,4 +83,5 @@ com\jobify\JobifyApplication.class
 com\jobify\user\entity\MyUser.class
 com\jobify\user\dto\MyUserDto$MyUserDtoBuilder.class
 com\jobify\offer\controller\OfferController.class
+com\jobify\company\dto\CompanyResponseHome$CompanyResponseHomeBuilder.class
 com\jobify\offer\repository\IOfferRepository.class

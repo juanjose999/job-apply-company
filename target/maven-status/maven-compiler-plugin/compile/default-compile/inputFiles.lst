@@ -1,10 +1,11 @@
 C:\Users\juancho\Desktop\spring_boot\proyects spring boot\monolitic\job\src\main\java\com\jobify\authentication\CustomAuthenticationProvider.java
 C:\Users\juancho\Desktop\spring_boot\proyects spring boot\monolitic\job\src\main\java\com\jobify\authentication\SecurityConfig.java
 C:\Users\juancho\Desktop\spring_boot\proyects spring boot\monolitic\job\src\main\java\com\jobify\company\controller\CompanyController.java
-C:\Users\juancho\Desktop\spring_boot\proyects spring boot\monolitic\job\src\main\java\com\jobify\company\controller\FormLogin.java
 C:\Users\juancho\Desktop\spring_boot\proyects spring boot\monolitic\job\src\main\java\com\jobify\company\dto\CompanyDto.java
 C:\Users\juancho\Desktop\spring_boot\proyects spring boot\monolitic\job\src\main\java\com\jobify\company\dto\CompanyMapper.java
 C:\Users\juancho\Desktop\spring_boot\proyects spring boot\monolitic\job\src\main\java\com\jobify\company\dto\CompanyResponseDto.java
+C:\Users\juancho\Desktop\spring_boot\proyects spring boot\monolitic\job\src\main\java\com\jobify\company\dto\CompanyResponseHome.java
+C:\Users\juancho\Desktop\spring_boot\proyects spring boot\monolitic\job\src\main\java\com\jobify\company\dto\FormLogin.java
 C:\Users\juancho\Desktop\spring_boot\proyects spring boot\monolitic\job\src\main\java\com\jobify\company\dto\FormUpdateCompany.java
 C:\Users\juancho\Desktop\spring_boot\proyects spring boot\monolitic\job\src\main\java\com\jobify\company\dto\UpdateStateOfferInsideCompany.java
 C:\Users\juancho\Desktop\spring_boot\proyects spring boot\monolitic\job\src\main\java\com\jobify\company\entity\Company.java
