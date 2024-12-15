@@ -2,6 +2,7 @@ package com.jobify;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jobify.authentication.CustomAuthenticationProvider;
 import com.jobify.offer.controller.OfferController;
 import com.jobify.company.entity.Company;
 import com.jobify.company.dto.CompanyDto;
@@ -19,6 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.File;
@@ -29,12 +33,14 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(OfferController.class)
 public class OfferControllerTest {
@@ -47,6 +53,12 @@ public class OfferControllerTest {
 
     @MockBean
     private CompanyServiceImpl companyService;
+
+    @MockBean
+    private AuthenticationManager authenticationManager;
+
+    @MockBean
+    private CustomAuthenticationProvider customAuthenticationProvider;
 
     private ObjectMapper objectMapper;
     private OfferDto offerDto;
@@ -96,13 +108,15 @@ public class OfferControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testUser", roles = {"USER"})
     void should_save_offerDto_inside_company_return_200() throws Exception {
         String jsonSaved = objectMapper.writeValueAsString(formSaveOffer);
 
         Mockito.when(offerService.saveOffer(formSaveOffer)).thenReturn(offerResponseDto);
         mockMvc.perform(post("/v1/offers")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonSaved))
+                .content(jsonSaved)
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value(offerDto.title()))
                 .andExpect(jsonPath("$.description").value(offerDto.description()))
@@ -112,13 +126,15 @@ public class OfferControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testUser", roles = {"USER"})
     void should_findOfferByInsideCompany_return_200() throws Exception {
         String emailCompany = companyDto.email();
 
         Mockito.when(offerService.findAllOffersInsideCompany(emailCompany)).thenReturn(Collections.singletonList(offerResponseDto));
         mockMvc.perform(get("/v1/offers/email/{emailCompany}", emailCompany)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(emailCompany))
+                .content(emailCompany)
+                        .with(csrf()))
                 .andExpect(status().isOk());
 
         Mockito.verify(offerService).findAllOffersInsideCompany(emailCompany);
@@ -134,6 +150,7 @@ public class OfferControllerTest {
 //    }
 
     @Test
+    @WithMockUser(username = "testUser", roles = {"USER"})
     void should_findOfferByName_return_200_and_list_offerResponseDtos() throws Exception {
         OfferDto offerDto = OfferDto.builder()
                 .title(offerResponseDtos.get(2).title())
@@ -150,7 +167,7 @@ public class OfferControllerTest {
         String encodedTitle = URLEncoder.encode(nameOffer, StandardCharsets.UTF_8);
 
         Mockito.when(offerService.findOfferByTitle(encodedTitle)).thenReturn(dtoList);
-        mockMvc.perform(get("/v1/offers/title/{title}", encodedTitle))
+        mockMvc.perform(get("/v1/offers/title/{title}", encodedTitle).with(csrf()))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(jsonPath("[0].title").value(offerDto.title()));
@@ -158,6 +175,7 @@ public class OfferControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testUser", roles = {"USER"})
     void should_findOfferById_return_200_and_offerResponseDto() throws Exception {
         Offer offer = OfferMapper.offerDtoToOffer(offerDto);
         offer.setId(123L);
@@ -171,7 +189,7 @@ public class OfferControllerTest {
 
         Mockito.when(offerService.findOfferById(123L)).thenReturn(OfferMapper.offerToOfferResponseDto(offer));
 
-        mockMvc.perform(get("/v1/offers/id/{id}", 123L))
+        mockMvc.perform(get("/v1/offers/id/{id}", 123L).with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(123L))
                 .andExpect(jsonPath("$.title").value(offerDto.title()));
@@ -180,6 +198,7 @@ public class OfferControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testUser", roles = {"USER"})
     void should_updateOffer_ByEmailCompany_return_200_and_offerResponseDto() throws Exception {
         Offer offer = OfferMapper.offerDtoToOffer(offerDto);
         offer.setId(123L);
@@ -205,7 +224,7 @@ public class OfferControllerTest {
 
         mockMvc.perform(put("/v1/offers")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(formUpdateOffer)))
+                .content(objectMapper.writeValueAsString(formUpdateOffer)).with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("title").value(offerResponseDto.title()))
                 .andExpect(jsonPath("description").value(offerResponseDto.description()))
@@ -215,6 +234,7 @@ public class OfferControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testUser", roles = {"USER"})
     void should_delete_Offer_ByEmailCompany_return_200_and_offerResponseDto() throws Exception {
         Offer offer = OfferMapper.offerDtoToOffer(offerDto);
         offer.setId(123L);
@@ -229,13 +249,15 @@ public class OfferControllerTest {
 
         mockMvc.perform(delete("/v1/offers")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(deleteOffer)))
+                        .content(objectMapper.writeValueAsString(deleteOffer))
+                        .with(csrf()))
                 .andExpect(status().isOk());
 
         Mockito.verify(offerService).deleteOffer(deleteOffer);
     }
 
     @Test
+    @WithMockUser(username = "testUser", roles = {"USER"})
     void should_deleteOffer_with_idOffer_not_exist_return_404_and_offerResponseDto() throws Exception {
         Offer offer = OfferMapper.offerDtoToOffer(offerDto);
         offer.setId(123L);
@@ -249,7 +271,8 @@ public class OfferControllerTest {
 
         mockMvc.perform(delete("/v1/offers")
                 .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(deleteOffer)))
+                        .content(objectMapper.writeValueAsString(deleteOffer))
+                        .with(csrf()))
                 .andExpect(status().isNotFound());
 
         Mockito.verify(offerService).deleteOffer(deleteOffer);

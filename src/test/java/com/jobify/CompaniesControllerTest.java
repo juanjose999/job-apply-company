@@ -2,6 +2,7 @@ package com.jobify;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jobify.authentication.CustomAuthenticationProvider;
 import com.jobify.company.controller.CompanyController;
 import com.jobify.company.dto.CompanyDto;
 import com.jobify.company.dto.CompanyMapper;
@@ -21,15 +22,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(CompanyController.class)
 public class CompaniesControllerTest {
@@ -42,6 +47,12 @@ public class CompaniesControllerTest {
 
     @MockBean
     private OfferServiceImpl offerService;
+
+    @MockBean
+    private AuthenticationManager authenticationManager;
+
+    @MockBean
+    private CustomAuthenticationProvider customAuthenticationProvider;
 
     @MockBean
     private CloudinaryService cloudinaryService;
@@ -69,11 +80,13 @@ public class CompaniesControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testUser", roles = {"USER"})
     public void should_save_company_return_status_200() throws Exception {
         Mockito.when(companyService.saveCompany(companyDto)).thenReturn(companyResponseDto);
-        mockMvc.perform(post("/v1/companies")
+        mockMvc.perform(post("/v1/companies/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(companyDto)))
+                        .content(objectMapper.writeValueAsString(companyDto))
+                        .with(csrf()))
                 .andExpect(status().isCreated())
                 .andExpect(content().json(objectMapper.writeValueAsString(companyResponseDto)))
                 .andExpect(jsonPath("$.fullName").value(companyDto.full_name()))
@@ -82,14 +95,17 @@ public class CompaniesControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testUser", roles = {"USER"})
     void should_getAllCompanies_return_companiesList_status_200() throws Exception{
         Mockito.when(companyService.findAllCompany()).thenReturn(companyResponseDtos);
-        mockMvc.perform(get("/v1/companies"))
+        mockMvc.perform(get("/v1/companies")
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(3));
     }
 
     @Test
+    @WithMockUser(username = "testUser", roles = {"USER"})
     void should_findCompanyByEmail_then_return_companyResponse_and_status_200() throws Exception {
         String findEmail = companyDto.email();
 
@@ -105,6 +121,7 @@ public class CompaniesControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testUser", roles = {"USER"})
     void should_updateCompany_then_return_companyResponse_and_status_200() throws Exception {
 
         FormUpdateCompany formUpdateCompany = FormUpdateCompany.builder()
@@ -122,7 +139,8 @@ public class CompaniesControllerTest {
 
         mockMvc.perform(put("/v1/companies")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(formUpdateCompany)))
+                .content(objectMapper.writeValueAsString(formUpdateCompany))
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.fullName").value(companyResponseDtoUpdate.fullName()))
                 .andExpect(jsonPath("$.email").value(companyResponseDtoUpdate.email()));
@@ -131,6 +149,7 @@ public class CompaniesControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testUser", roles = {"USER"})
     void should_updateCompany_not_exist_then_return_404() throws Exception {
         String emailNotExist = "notexist@gmail.com";
         String expectedErrorMessage = "Company not found";
@@ -147,13 +166,15 @@ public class CompaniesControllerTest {
 
         mockMvc.perform(put("/v1/companies")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(formUpdateCompany)))
+                        .content(objectMapper.writeValueAsString(formUpdateCompany))
+                        .with(csrf()))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
                 .andExpect(jsonPath("$.message").value(expectedErrorMessage));
     }
 
     @Test
+    @WithMockUser(username = "testUser", roles = {"USER"})
     void should_deleteCompanyExist_then_return_200() throws Exception {
         String emailToDelete = companyDto.email();
 
@@ -161,13 +182,15 @@ public class CompaniesControllerTest {
 
         mockMvc.perform(delete("/v1/companies")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(emailToDelete))
+                .content(emailToDelete)
+                        .with(csrf()))
                 .andExpect(status().isOk());
 
         Mockito.verify(companyService).deleteCompanyByEmail(companyDto.email());
     }
 
     @Test
+    @WithMockUser(username = "testUser", roles = {"USER"})
     void should_deleteCompany_not_exist_then_return_404() throws Exception {
         String emailNotExist = "notexist@gmail.com";
 
@@ -175,7 +198,8 @@ public class CompaniesControllerTest {
 
         mockMvc.perform(delete("/v1/companies")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(emailNotExist))
+                .content(emailNotExist)
+                        .with(csrf()))
                 .andExpect(status().isNotFound());
 
         Mockito.verify(companyService).deleteCompanyByEmail(emailNotExist);

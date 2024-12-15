@@ -1,6 +1,7 @@
 package com.jobify;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jobify.authentication.CustomAuthenticationProvider;
 import com.jobify.shared.cloudinary.service.CloudinaryService;
 import com.jobify.user.controller.MyUserController;
 import com.jobify.offer_user.dto.FormResponseApplyOffer;
@@ -27,16 +28,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.File;
 import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(MyUserController.class)
 public class UserControllerTest {
@@ -49,6 +54,12 @@ public class UserControllerTest {
 
     @MockBean
     private CloudinaryService cloudinaryService;
+
+    @MockBean
+    private AuthenticationManager authenticationManager;
+
+    @MockBean
+    private CustomAuthenticationProvider customAuthenticationProvider;
 
     private ObjectMapper objectMapper;
     private MyUserDto userDto;
@@ -71,12 +82,14 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testUser", roles = {"USER"})
     void should_create_user_return_200() throws Exception {
         Mockito.when(userService.saveUser(userDto)).thenReturn(userResponseDto);
 
-        mockMvc.perform(post("/v1/users")
+        mockMvc.perform(post("/v1/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userDto)))
+                .content(objectMapper.writeValueAsString(userDto))
+                        .with(csrf()))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value(userDto.first_name()+userDto.last_name()))
                 .andExpect(jsonPath("$.email").value(userDto.email()));
@@ -85,10 +98,12 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testUser", roles = {"USER"})
     void should_findUserByEmail_return_userDto() throws Exception {
         Mockito.when(userService.findUserByEmail(userDto.email())).thenReturn(userResponseDto);
 
-        mockMvc.perform(get("/v1/users/email/{email}", userDto.email()))
+        mockMvc.perform(get("/v1/users/email/{email}", userDto.email())
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(userDto.first_name() + userDto.last_name()))
                 .andExpect(jsonPath("$.email").value(userDto.email()));
@@ -97,6 +112,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testUser", roles = {"USER"})
     void should_update_user_return_200() throws Exception {
         FormUpdateUser formUpdateUser = FormUpdateUser.builder()
                 .emailFindUser(userDto.email())
@@ -114,7 +130,8 @@ public class UserControllerTest {
         Mockito.when(userService.updateUserByEmail(formUpdateUser)).thenReturn(userResponseDto);
         mockMvc.perform(put("/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(formUpdateUser)))
+                .content(objectMapper.writeValueAsString(formUpdateUser))
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("benekspring"))
                 .andExpect(jsonPath("$.email").value("benek@gmail.com"));
@@ -123,6 +140,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testUser", roles = {"USER"})
     void should_userApplyOffer_return_200() throws Exception {
         MyUser user = MyUserMapper.UserDtoToUser(userDto);
 
@@ -149,7 +167,8 @@ public class UserControllerTest {
         Mockito.when(userService.userApplyOffer(applyOffer)).thenReturn(new FormResponseApplyOffer(offer.getTitle(), String.valueOf(LocalDateTime.now()), "PENDING"));
         mockMvc.perform(post("/v1/users/apply-to-offer")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(applyOffer)))
+                .content(objectMapper.writeValueAsString(applyOffer))
+                        .with(csrf()))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name_offer").value(offer.getTitle()));
 
@@ -157,25 +176,27 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testUser", roles = {"USER"})
     void should_delete_user_return_200() throws Exception {
         Mockito.when(userService.findUserByEmail(userDto.email())).thenReturn(userResponseDto);
         Mockito.when(userService.deleteUser(userDto.email())).thenReturn(true);
         mockMvc.perform(delete("/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(userDto.email()))
+                .content(userDto.email()).with(csrf()))
                 .andExpect(status().isOk());
 
         Mockito.verify(userService).deleteUser(userDto.email());
     }
 
     @Test
+    @WithMockUser(username = "testUser", roles = {"USER"})
     void should_delete_userNotFound_return_exception() throws Exception, MyUserNotFoundException {
         String emailNotFound = "noexist@gmail.com";
 
         Mockito.when(userService.findUserByEmail(emailNotFound)).thenThrow(MyUserNotFoundException.class);
         mockMvc.perform(delete("/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(emailNotFound))
+                .content(emailNotFound).with(csrf()))
                 .andExpect(status().isNotFound());
         Mockito.verify(userService).deleteUser(emailNotFound);
     }
