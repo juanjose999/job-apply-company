@@ -1,4 +1,4 @@
-package com.jobify.company.controller;
+package com.jobify.company.dto;
 
 public record FormLogin(String username, String password) {
 }

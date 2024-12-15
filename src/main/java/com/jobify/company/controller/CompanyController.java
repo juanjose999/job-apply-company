@@ -1,9 +1,6 @@
 package com.jobify.company.controller;
 
-import com.jobify.company.dto.CompanyDto;
-import com.jobify.company.dto.CompanyResponseDto;
-import com.jobify.company.dto.FormUpdateCompany;
-import com.jobify.company.dto.UpdateStateOfferInsideCompany;
+import com.jobify.company.dto.*;
 import com.jobify.offer_user.dto.OffersWithApplicationsResponseDto;
 import com.jobify.shared.exception.exceptions.CompanyNotFoundException;
 import com.jobify.shared.exception.exceptions.OfferNotFoundException;
@@ -62,12 +59,13 @@ public class CompanyController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginCompany(@RequestBody FormLogin formLogin){
+    public ResponseEntity<?> loginCompany(@RequestBody FormLogin formLogin) throws CompanyNotFoundException {
         Authentication auth = authentication.authenticate(new UsernamePasswordAuthenticationToken(formLogin.username(), formLogin.password()));
         if(auth.isAuthenticated()){
             UserDetails userDetails = (UserDetails) auth.getPrincipal();
-            System.out.println("El usuario con el nombre + " + userDetails.getUsername()  +" ha iniciado seccion");
-            return ResponseEntity.ok(userDetails);
+            System.out.println("El usuario con el email + " + formLogin.username() +"  ha iniciado seccion");
+            CompanyResponseHome responseHome = companyService.companyHome(formLogin.username());
+            return ResponseEntity.ok(responseHome);
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }

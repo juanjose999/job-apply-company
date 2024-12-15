@@ -1,6 +1,6 @@
 package com.jobify.user.controller;
 
-import com.jobify.company.controller.FormLogin;
+import com.jobify.company.dto.FormLogin;
 import com.jobify.offer_user.dto.FormResponseApplyOffer;
 import com.jobify.offer_user.dto.FormUserApplyOffer;
 import com.jobify.user.dto.FormUpdateUser;

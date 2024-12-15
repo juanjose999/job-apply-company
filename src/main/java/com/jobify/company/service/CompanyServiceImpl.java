@@ -100,6 +100,17 @@ public class CompanyServiceImpl implements ICompanyService, UserDetailsService {
                 .orElseThrow(() -> new CompanyNotFoundException("Company not found with email " + email)));
     }
 
+    @Override
+    public CompanyResponseHome companyHome(String email) throws CompanyNotFoundException {
+        Company company = findCompany(email);
+        return CompanyResponseHome.builder()
+                .nameCompany(company.getFull_name())
+                .linkImgProfile(company.getLinkImgProfile())
+                .email(company.getEmail())
+                .totalOffers(company.getOffer().size())
+                .totalApply((int) company.getOffer().stream().count())
+                .build();
+    }
 
 
     @Override
